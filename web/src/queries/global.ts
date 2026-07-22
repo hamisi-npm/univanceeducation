@@ -47,6 +47,7 @@ export const siteSettingsQuery = defineQuery(`*[_type == "siteSettings" && _id =
   url,
   logo ${imageWithAltProjection},
   logoLight ${imageWithAltProjection},
+  "faviconUrl": coalesce(favicon.asset->url, logo.asset->url),
   primaryOffice {
     building,
     floor,

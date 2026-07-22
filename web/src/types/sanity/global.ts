@@ -45,6 +45,8 @@ export type SanitySiteSettings = {
   url: string;
   logo: SanityImageWithAlt;
   logoLight?: SanityImageWithAlt | null;
+  /** Resolved favicon (or logo fallback) CDN URL from GROQ. */
+  faviconUrl?: string | null;
   primaryOffice?: SanityPrimaryOffice | null;
   contact: {
     email: string;

@@ -1,31 +1,25 @@
-import { ImageResponse } from "next/og";
-
-import { brandColors } from "@/config/brand";
+import { SANITY_REVALIDATE_SECONDS } from "@/lib/sanity/cache-tags";
+import { renderBrandIcon } from "@/lib/brand-icon";
+import { getSiteConfig } from "@/services/site";
 
 export const size = { width: 180, height: 180 };
 export const contentType = "image/png";
+export const revalidate = SANITY_REVALIDATE_SECONDS;
 
-export default function AppleIcon() {
-  return new ImageResponse(
-    (
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          background: brandColors.primary,
-          borderRadius: 36,
-          color: brandColors.white,
-          fontSize: 52,
-          fontWeight: 700,
-          letterSpacing: "-0.02em",
-        }}
-      >
-        UE
-      </div>
-    ),
-    { ...size },
-  );
+export default async function AppleIcon() {
+  let imageSrc = "";
+
+  try {
+    const site = await getSiteConfig();
+    imageSrc = site.faviconUrl || site.logo.src;
+  } catch {
+    // Dataset may be empty — use monogram fallback.
+  }
+
+  return renderBrandIcon({
+    size: size.width,
+    borderRadius: 36,
+    fontSize: 52,
+    imageSrc: imageSrc || undefined,
+  });
 }

@@ -91,9 +91,10 @@ export const siteSettings = defineType({
       title: "Favicon",
       type: "image",
       group: "branding",
-      description: "Square icon for browser tabs. Recommended 32×32 or 512×512 px.",
+      description:
+        "Square icon for browser tabs on the public site and Studio. Recommended 512×512 PNG or SVG. Falls back to the primary logo when empty.",
       options: {
-        accept: "image/png,image/svg+xml,image/x-icon",
+        accept: "image/png,image/svg+xml,image/x-icon,image/jpeg,image/webp",
       },
     }),
     defineField({

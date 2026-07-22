@@ -129,6 +129,7 @@ export function mapSiteSettings(document: SanitySiteSettings): SiteConfig {
       ...primaryLogo,
       srcLight: lightLogo?.src ?? primaryLogo.srcLight,
     },
+    faviconUrl: document.faviconUrl?.trim() || primaryLogo.src || "",
     keywords: document.keywords?.length ? document.keywords : [],
     authors: [{ name: document.name || "" }],
     office: Object.values(office).some(Boolean) ? office : EMPTY_OFFICE,

@@ -12,7 +12,8 @@
     "start": "sanity start",
     "lint": "eslint .",
     "typegen": "sanity schema extract && sanity typegen generate",
-    "schema:deploy": "sanity schema deploy"
+    "schema:deploy": "sanity schema deploy",
+    "favicon:sync": "node ./scripts/sync-favicon.mjs"
   },
   "keywords": [
     "sanity"

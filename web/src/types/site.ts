@@ -15,6 +15,8 @@ export type SiteConfig = {
   url: string;
   ogImage: string;
   logo: SiteLogo;
+  /** Absolute URL for browser/tab icons — favicon asset or logo fallback. */
+  faviconUrl: string;
   keywords: readonly string[];
   authors: readonly { name: string }[];
   office: PrimaryOffice;
