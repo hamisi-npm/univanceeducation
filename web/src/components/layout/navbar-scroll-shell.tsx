@@ -1,8 +1,26 @@
 "use client";
 
-import { useEffect, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
 
 import { cn } from "@/lib/utils";
+
+type NavbarScrollContextValue = {
+  scrolled: boolean;
+};
+
+const NavbarScrollContext = createContext<NavbarScrollContextValue>({
+  scrolled: false,
+});
+
+export function useNavbarScroll() {
+  return useContext(NavbarScrollContext);
+}
 
 type NavbarScrollShellProps = {
   children: ReactNode;
@@ -22,15 +40,17 @@ export function NavbarScrollShell({ children }: NavbarScrollShellProps) {
   }, []);
 
   return (
-    <header
-      className={cn(
-        "fixed top-0 z-50 w-full transition-[background-color,border-color,backdrop-filter] duration-300 ease-out",
-        scrolled
-          ? "border-b border-border bg-background/95 backdrop-blur-sm"
-          : "border-b border-transparent bg-transparent",
-      )}
-    >
-      {children}
-    </header>
+    <NavbarScrollContext.Provider value={{ scrolled }}>
+      <header
+        className={cn(
+          "fixed top-0 z-50 w-full transition-[background-color,border-color,backdrop-filter,box-shadow] duration-300 ease-out",
+          scrolled
+            ? "border-b border-border/80 bg-background/95 shadow-sm backdrop-blur-sm"
+            : "border-b border-transparent bg-brand-navy/90 backdrop-blur-sm",
+        )}
+      >
+        {children}
+      </header>
+    </NavbarScrollContext.Provider>
   );
 }

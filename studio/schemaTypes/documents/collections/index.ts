@@ -5,6 +5,7 @@ import {blogPost} from './blogPost'
 import {destination} from './destination'
 import {partnerUniversity} from './partnerUniversity'
 import {processStep} from './processStep'
+import {program} from './program'
 import {service} from './service'
 import {studyGuide} from './studyGuide'
 import {teamMember} from './teamMember'
@@ -15,6 +16,7 @@ export const collectionTypes: SchemaTypeDefinition[] = [
   service,
   destination,
   university,
+  program,
   partnerUniversity,
   teamMember,
   processStep,

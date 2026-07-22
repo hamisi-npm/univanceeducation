@@ -24,23 +24,31 @@ export const homepageQuery = defineQuery(`*[_type == "homepage" && _id == $id][0
         external
       }
     },
-    image ${imageWithAltProjection},
-    floatingCards[] {
-      title,
-      subtitle,
-      icon,
-      position
-    }
+    image ${imageWithAltProjection}
   },
   trustStats[] {
     value,
     label,
     footnote
   },
-  trustedUniversities {
+  programFinder {
     heading,
-    partners[]->{
-      name
+    title,
+    description,
+    destinationLabel,
+    destinationPlaceholder,
+    courseLabel,
+    coursePlaceholder,
+    studyLevelLabel,
+    studyLevelPlaceholder,
+    backgroundTheme,
+    showDestination,
+    showCourse,
+    showStudyLevel,
+    cta {
+      label,
+      href,
+      external
     }
   },
   servicesPreview {
@@ -82,15 +90,13 @@ export const homepageQuery = defineQuery(`*[_type == "homepage" && _id == $id][0
       ctaLabel
     }
   },
-  processPreview {
+  whyChooseUs {
     header {
       badge,
       heading,
       description
     },
-    steps[]->{
-      _id,
-      step,
+    features[] {
       title,
       description,
       icon
@@ -98,25 +104,7 @@ export const homepageQuery = defineQuery(`*[_type == "homepage" && _id == $id][0
     cta {
       label,
       href,
-      supportingText
-    }
-  },
-  testimonialsPreview {
-    header {
-      badge,
-      heading,
-      description
-    },
-    testimonials[]->{
-      _id,
-      name,
-      course,
-      rating,
-      quote,
-      featured,
-      image ${imageWithAltProjection},
-      "destination": destination->country,
-      "university": university->name
+      external
     }
   },
   ctaBanner {

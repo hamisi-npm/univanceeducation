@@ -13,6 +13,7 @@ export const marketingRoutes: MarketingRoute[] = [
   { path: "/services", changeFrequency: "monthly", priority: 0.9 },
   { path: "/destinations", changeFrequency: "monthly", priority: 0.9 },
   { path: "/universities", changeFrequency: "monthly", priority: 0.8 },
+  { path: "/programs", changeFrequency: "weekly", priority: 0.9 },
   { path: "/blog", changeFrequency: "weekly", priority: 0.8 },
   { path: "/study-guides", changeFrequency: "weekly", priority: 0.8 },
   { path: "/faqs", changeFrequency: "monthly", priority: 0.7 },
@@ -73,6 +74,15 @@ export const pageSeo: Record<string, PageSeoEntry> = {
     breadcrumbs: [
       { name: "Home", path: "/" },
       { name: "Universities", path: "/universities" },
+    ],
+  },
+  "/programs": {
+    title: "Programs",
+    description:
+      "Browse study abroad programs by destination, university, course category, and study level — with tuition, duration, and scholarship details.",
+    breadcrumbs: [
+      { name: "Home", path: "/" },
+      { name: "Programs", path: "/programs" },
     ],
   },
   "/blog": {

@@ -11,11 +11,12 @@ Track feature migration into `univanceeducation/web`. Each row requires lint + t
 | Navigation | Done | Via `getGlobalLayoutData` / site services |
 | Footer | Done | Via site services |
 | Site Settings | Done | Via site services |
-| Home | Done | Sanity-only, no fallbacks |
+| Home | Done | Redesign 2026-07: full-bleed hero, program finder, brand tokens, new sections |
 | About | Done | |
 | Services | Done | |
 | Destinations | Done | |
 | Universities | Done | |
+| Programs | Done | Listing `/programs`, detail `/programs/[slug]`, taxonomies, finder → query params; university/destination joins |
 | Study Guides | Done | |
 | Blog | Done | |
 | FAQ | Done | |
@@ -23,12 +24,26 @@ Track feature migration into `univanceeducation/web`. Each row requires lint + t
 | Legal | Done | |
 | SEO / metadata | Done | CMS SEO + createCmsPageMetadata |
 | Hardening | Done | No fallbacks; empty dataset needs seed |
+| Homepage redesign | Done | Schema + UI match approved mock; lint/typecheck/build pass |
+| Programs module | Done | Schemas + data layer + listing/detail + finder + uni/dest integrations + SEO/sitemap |
 
-## Gates (verified 2026-07-18)
+## Gates (verified 2026-07-22)
 
 ```bash
-cd univanceeducation/studio && npm run lint   # pass
 cd univanceeducation/web && npm run lint && npm run typecheck && npm run build  # pass
+```
+
+## Programs editorial (Studio)
+
+After deploying Studio schema changes:
+
+1. Create taxonomy docs: Course Categories, Study Levels, Faculties, Degree Types
+2. Create Programs linked to Universities
+3. Fill **Programs Page** singleton (`programsPage`)
+4. Update Homepage **Program Finder** chrome; set CTA href to `/programs`
+
+```bash
+cd univanceeducation/studio && npm run deploy
 ```
 
 ## Important: empty Content Lake

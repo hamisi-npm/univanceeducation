@@ -1,40 +1,56 @@
+import Image from "next/image";
+
 import { Container } from "@/components/layout/container";
 import { HeroContent } from "@/features/home/components/HeroContent";
 import { HeroCTA } from "@/features/home/components/HeroCTA";
-import { HeroImage } from "@/features/home/components/HeroImage";
 import { HeroMotionItem } from "@/features/home/components/hero-motion-item";
+import { ProgramFinder } from "@/features/home/components/program-finder";
 import { TrustBadges } from "@/features/home/components/TrustBadges";
-import type { HeroContentData, HeroTrustStat } from "@/features/home/types";
+import type {
+  HeroContentData,
+  HeroTrustStat,
+  ProgramFinderContent,
+} from "@/features/home/types";
 import type { SiteConfig } from "@/types/site";
+
+const HERO_IMAGE_BLUR =
+  "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAUH/8QAIhAAAgEDBAMBAAAAAAAAAAAAAQIDAAQRBRIhMQYTQVFh/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAZEQACAwEAAAAAAAAAAAAAAAABAgADESH/2gAMAwEAAhEDEEA/AJOk6jp1/YzWdxG8ci5DKwyCD3FfaYiIiKAP/9k=";
 
 type HeroProps = {
   content: HeroContentData;
   trustStats: HeroTrustStat[];
+  programFinder: ProgramFinderContent;
   site: SiteConfig;
 };
 
-export function Hero({ content, trustStats, site }: HeroProps) {
+export function Hero({ content, trustStats, programFinder, site }: HeroProps) {
   return (
-    <section
-      aria-labelledby="hero-heading"
-      className="relative -mt-14 min-h-[85vh] overflow-hidden bg-background pt-14"
-    >
-      <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_70%_at_50%_-20%,var(--muted)_0%,transparent_60%)]"
-        aria-hidden="true"
-      />
-      <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_50%_40%_at_100%_50%,var(--muted)_0%,transparent_50%)] opacity-60"
-        aria-hidden="true"
-      />
-      <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-background"
-        aria-hidden="true"
-      />
+    <section aria-labelledby="hero-heading" className="relative bg-brand-beige">
+      <div className="relative -mt-16 min-h-[78vh] overflow-hidden bg-brand-navy pt-16 sm:min-h-[82vh]">
+        <div className="absolute inset-0">
+          <Image
+            src={content.image.src}
+            alt={content.image.alt}
+            fill
+            priority
+            quality={85}
+            placeholder="blur"
+            blurDataURL={HERO_IMAGE_BLUR}
+            sizes="100vw"
+            className="object-cover object-center"
+          />
+          <div
+            className="absolute inset-0 bg-gradient-to-r from-brand-navy/95 via-brand-navy/75 to-brand-navy/35"
+            aria-hidden="true"
+          />
+          <div
+            className="absolute inset-0 bg-gradient-to-t from-brand-navy/80 via-transparent to-brand-navy/40"
+            aria-hidden="true"
+          />
+        </div>
 
-      <Container className="relative flex min-h-[calc(85vh-3.5rem)] flex-col justify-center py-16 sm:py-20 lg:py-24 xl:py-28">
-        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16 xl:gap-20">
-          <div className="flex flex-col gap-10">
+        <Container className="relative flex min-h-[calc(78vh-4rem)] flex-col justify-center pb-28 pt-16 sm:min-h-[calc(82vh-4rem)] sm:pb-32 sm:pt-20 lg:pb-36 lg:pt-24">
+          <div className="flex max-w-2xl flex-col gap-8 lg:gap-10">
             <HeroMotionItem index={0}>
               <HeroContent content={content} site={site} />
             </HeroMotionItem>
@@ -42,13 +58,20 @@ export function Hero({ content, trustStats, site }: HeroProps) {
               <HeroCTA content={content} />
             </HeroMotionItem>
             <HeroMotionItem index={2}>
-              <TrustBadges stats={trustStats} className="border-t border-border/60 pt-8" />
+              <TrustBadges stats={trustStats} />
             </HeroMotionItem>
           </div>
+        </Container>
+      </div>
 
-          <HeroImage content={content} className="lg:justify-self-end" />
-        </div>
-      </Container>
+      {/* In-flow overlap: half on hero, half above services — no absolute clip. */}
+      <div className="relative z-20 -mt-14 px-4 sm:-mt-16 sm:px-6 lg:-mt-20">
+        <Container>
+          <HeroMotionItem index={3}>
+            <ProgramFinder content={programFinder} />
+          </HeroMotionItem>
+        </Container>
+      </div>
     </section>
   );
 }

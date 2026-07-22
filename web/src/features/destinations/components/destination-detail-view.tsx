@@ -3,17 +3,23 @@ import Link from "next/link";
 
 import { Container } from "@/components/layout/container";
 import { Button } from "@/components/ui/button";
+import { RelatedProgramsSection } from "@/features/programs";
 import { TestimonialCard } from "@/features/testimonials/components/testimonial-card";
 import { UniversityCard } from "@/features/universities/components/university-card";
+import type { ProgramCard } from "@/types/programs";
 import type { DestinationDetail } from "@/types/destinations";
 import { buttonStyles, sectionStyles } from "@/lib/section-styles";
 import { cn } from "@/lib/utils";
 
 type DestinationDetailViewProps = {
   destination: DestinationDetail;
+  programs?: ProgramCard[];
 };
 
-export function DestinationDetailView({ destination }: DestinationDetailViewProps) {
+export function DestinationDetailView({
+  destination,
+  programs = [],
+}: DestinationDetailViewProps) {
   const featuredTestimonial = destination.testimonials.find((item) => item.featured);
   const supportingTestimonials = destination.testimonials.filter((item) => !item.featured);
 
@@ -141,6 +147,13 @@ export function DestinationDetailView({ destination }: DestinationDetailViewProp
           </Container>
         </section>
       ) : null}
+
+      <RelatedProgramsSection
+        heading={`Popular programs in ${destination.country}`}
+        programs={programs}
+        viewAllHref={`/programs?destination=${encodeURIComponent(destination.slug)}`}
+        viewAllLabel="View all programs"
+      />
 
       {destination.universities.length > 0 ? (
         <section

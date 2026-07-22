@@ -13,6 +13,7 @@ import {PanelLeftIcon} from '@sanity/icons/PanelLeft'
 import {StarIcon} from '@sanity/icons/Star'
 import {TagIcon} from '@sanity/icons/Tag'
 import {UsersIcon} from '@sanity/icons/Users'
+import {DocumentIcon} from '@sanity/icons/Document'
 import type {ComponentType} from 'react'
 import type {StructureBuilder, StructureResolver} from 'sanity/structure'
 
@@ -149,6 +150,18 @@ export const structure: StructureResolver = (S) =>
             defaultOrdering: [{field: 'order', direction: 'asc'}],
           }),
         ]),
+        section(S, 'Programs', DocumentIcon, [
+          singletonEditor(S, {
+            title: 'Programs Page',
+            schemaType: 'programsPage',
+            documentId: singletonDocumentIds.programsPage,
+          }),
+          collectionEditor(S, {
+            title: 'Programs',
+            schemaType: 'program',
+            defaultOrdering: [{field: 'order', direction: 'asc'}],
+          }),
+        ]),
         section(S, 'Study Guides', BookIcon, [
           singletonEditor(S, {
             title: 'Study Guides Page',
@@ -251,6 +264,26 @@ export const structure: StructureResolver = (S) =>
         collectionEditor(S, {
           title: 'FAQ Categories',
           schemaType: 'faqCategory',
+          defaultOrdering: [{field: 'order', direction: 'asc'}],
+        }),
+        collectionEditor(S, {
+          title: 'Course Categories',
+          schemaType: 'courseCategory',
+          defaultOrdering: [{field: 'order', direction: 'asc'}],
+        }),
+        collectionEditor(S, {
+          title: 'Study Levels',
+          schemaType: 'studyLevel',
+          defaultOrdering: [{field: 'order', direction: 'asc'}],
+        }),
+        collectionEditor(S, {
+          title: 'Faculties',
+          schemaType: 'faculty',
+          defaultOrdering: [{field: 'order', direction: 'asc'}],
+        }),
+        collectionEditor(S, {
+          title: 'Degree Types',
+          schemaType: 'degreeType',
           defaultOrdering: [{field: 'order', direction: 'asc'}],
         }),
       ]),

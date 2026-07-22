@@ -4,15 +4,21 @@ import { ArrowRight, MapPin } from "lucide-react";
 
 import { Container } from "@/components/layout/container";
 import { Button } from "@/components/ui/button";
+import { RelatedProgramsSection } from "@/features/programs";
+import type { ProgramCard } from "@/types/programs";
 import type { UniversityDetail } from "@/types/universities";
 import { buttonStyles, sectionStyles } from "@/lib/section-styles";
 import { cn } from "@/lib/utils";
 
 type UniversityDetailViewProps = {
   university: UniversityDetail;
+  programs?: ProgramCard[];
 };
 
-export function UniversityDetailView({ university }: UniversityDetailViewProps) {
+export function UniversityDetailView({
+  university,
+  programs = [],
+}: UniversityDetailViewProps) {
   return (
     <>
       <section
@@ -74,10 +80,18 @@ export function UniversityDetailView({ university }: UniversityDetailViewProps) 
         </Container>
       </section>
 
-      <section className={cn(sectionStyles.sectionMuted, sectionStyles.padding)}>
-        <Container>
-          <div className="mx-auto max-w-3xl space-y-6">
-            <div className="space-y-3">
+      <RelatedProgramsSection
+        heading="Programs offered"
+        programs={programs}
+        viewAllHref={`/programs?university=${encodeURIComponent(university.slug)}`}
+        viewAllLabel="View all programs"
+        muted
+      />
+
+      {university.programs.length > 0 && programs.length === 0 ? (
+        <section className={cn(sectionStyles.sectionMuted, sectionStyles.padding)}>
+          <Container>
+            <div className="mx-auto max-w-3xl space-y-3">
               <h2 className={sectionStyles.heading}>Popular programs</h2>
               <ul className="flex flex-wrap gap-2">
                 {university.programs.map((program) => (
@@ -90,18 +104,22 @@ export function UniversityDetailView({ university }: UniversityDetailViewProps) 
                 ))}
               </ul>
             </div>
+          </Container>
+        </section>
+      ) : null}
 
-            {university.scholarships ? (
-              <div className="space-y-3">
-                <h2 className={sectionStyles.heading}>Scholarships</h2>
-                <p className="text-pretty text-base leading-relaxed text-muted-foreground">
-                  {university.scholarships}
-                </p>
-              </div>
-            ) : null}
-          </div>
-        </Container>
-      </section>
+      {university.scholarships ? (
+        <section className={cn(sectionStyles.sectionBackground, sectionStyles.padding)}>
+          <Container>
+            <div className="mx-auto max-w-3xl space-y-3">
+              <h2 className={sectionStyles.heading}>Scholarships</h2>
+              <p className="text-pretty text-base leading-relaxed text-muted-foreground">
+                {university.scholarships}
+              </p>
+            </div>
+          </Container>
+        </section>
+      ) : null}
     </>
   );
 }

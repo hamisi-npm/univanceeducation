@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { DetailJsonLd } from "@/components/seo/detail-json-ld";
 import { UniversityDetailView } from "@/features/universities/components/university-detail-view";
 import { createMetadata } from "@/lib/metadata";
+import { getProgramsByUniversity } from "@/services/programs";
 import { getSiteConfig } from "@/services/site";
 import {
   getUniversityBySlug,
@@ -46,6 +47,8 @@ export default async function UniversityPage({ params }: UniversityPageProps) {
     notFound();
   }
 
+  const programs = await getProgramsByUniversity(university.slug, 6);
+
   const breadcrumbs = [
     { name: "Home", path: "/" },
     { name: "Universities", path: "/universities" },
@@ -55,7 +58,7 @@ export default async function UniversityPage({ params }: UniversityPageProps) {
   return (
     <main id="main-content">
       <DetailJsonLd breadcrumbs={breadcrumbs} />
-      <UniversityDetailView university={university} />
+      <UniversityDetailView university={university} programs={programs} />
     </main>
   );
 }

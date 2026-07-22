@@ -26,35 +26,80 @@ const serviceIcons: Record<ServiceIconName, LucideIcon> = {
 type ServiceCardProps = {
   service: Service;
   className?: string;
+  align?: "start" | "center";
 };
 
-export function ServiceCard({ service, className }: ServiceCardProps) {
+export function ServiceCard({
+  service,
+  className,
+  align = "start",
+}: ServiceCardProps) {
   const Icon = serviceIcons[service.icon];
+  const centered = align === "center";
 
   return (
     <article
       className={cn(
-        cardStyles.base,
+        cardStyles.elevated,
         cardStyles.interactive,
-        cardStyles.padding,
+        centered ? "p-5 sm:p-6" : cardStyles.padding,
         "group relative flex h-full flex-col",
         className,
       )}
     >
       <Link
         href={service.href}
-        className={cn("flex h-full flex-col gap-4", cardStyles.linkFocus)}
+        className={cn(
+          "flex h-full flex-col gap-3",
+          cardStyles.linkFocus,
+          centered && "items-center text-center",
+        )}
       >
-        <div className={cardStyles.iconBox}>
-          <Icon className={cn(cardStyles.icon, "size-5")} aria-hidden="true" />
+        <div
+          className={cn(
+            cardStyles.iconBox,
+            centered && cardStyles.iconCircle,
+          )}
+        >
+          <Icon
+            className={cn(
+              "size-5",
+              centered ? "text-brand-gold" : cardStyles.icon,
+            )}
+            aria-hidden="true"
+          />
         </div>
 
-        <div className="flex flex-1 flex-col gap-2">
-          <h3 className={cardStyles.title}>{service.title}</h3>
-          <p className={cardStyles.body}>{service.description}</p>
+        <div
+          className={cn(
+            "flex flex-1 flex-col gap-2",
+            centered && "items-center",
+          )}
+        >
+          <h3
+            className={cn(
+              cardStyles.title,
+              centered && "text-base",
+            )}
+          >
+            {service.title}
+          </h3>
+          <p
+            className={cn(
+              cardStyles.body,
+              centered && "line-clamp-3 text-xs sm:text-sm",
+            )}
+          >
+            {service.description}
+          </p>
         </div>
 
-        <span className={cardStyles.textLink}>
+        <span
+          className={cn(
+            cardStyles.textLink,
+            centered && "justify-center",
+          )}
+        >
           {service.ctaLabel}
           <ArrowRight className="size-4" aria-hidden="true" />
         </span>

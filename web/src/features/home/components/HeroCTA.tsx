@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import type { HeroContentData } from "@/features/home/types";
@@ -16,21 +17,40 @@ export function HeroCTA({ content, className }: HeroCTAProps) {
   return (
     <div className={cn("space-y-4", className)}>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
-        <Button asChild size="lg" className={buttonStyles.responsiveLg}>
-          <Link href={ctas.primary.href}>{ctas.primary.label}</Link>
+        <Button
+          asChild
+          size="lg"
+          className={cn(
+            buttonStyles.responsiveLg,
+            buttonStyles.gold,
+            "h-12 gap-2 px-6 text-sm font-semibold",
+          )}
+        >
+          <Link href={ctas.primary.href}>
+            {ctas.primary.label}
+            <ArrowRight className="size-4" aria-hidden="true" />
+          </Link>
         </Button>
         <Button
           asChild
-          variant="outline"
           size="lg"
-          className={buttonStyles.responsiveOutline}
+          className={cn(
+            buttonStyles.responsiveLg,
+            buttonStyles.outlineOnHero,
+            "h-12 gap-2 px-6 text-sm font-semibold",
+          )}
         >
-          <Link href={ctas.secondary.href}>{ctas.secondary.label}</Link>
+          <Link href={ctas.secondary.href}>
+            {ctas.secondary.label}
+            <ArrowRight className="size-4" aria-hidden="true" />
+          </Link>
         </Button>
       </div>
-      <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
-        {trustMicrocopy}
-      </p>
+      {trustMicrocopy ? (
+        <p className="text-pretty text-sm leading-relaxed text-white/70">
+          {trustMicrocopy}
+        </p>
+      ) : null}
     </div>
   );
 }

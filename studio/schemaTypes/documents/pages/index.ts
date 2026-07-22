@@ -7,6 +7,7 @@ import {destinationsPage} from './destinationsPage'
 import {faqsPage} from './faqsPage'
 import {homepage} from './homepage'
 import {legalPage} from './legalPage'
+import {programsPage} from './programsPage'
 import {servicesPage} from './servicesPage'
 import {studyGuidesPage} from './studyGuidesPage'
 import {universitiesPage} from './universitiesPage'
@@ -20,6 +21,7 @@ export const pageDocumentTypes: SchemaTypeDefinition[] = [
   servicesPage,
   destinationsPage,
   universitiesPage,
+  programsPage,
   blogPage,
   studyGuidesPage,
 ]

@@ -4,11 +4,7 @@ import {
   singletonDocumentIds,
   singletonDocumentRule,
 } from "../../singletons";
-import {
-  limits,
-  requiredHref,
-  requiredString,
-} from "../../fields/validators";
+import { limits, requiredString } from "../../fields/validators";
 
 export const homepage = defineType({
   name: "homepage",
@@ -17,12 +13,12 @@ export const homepage = defineType({
   description: `Homepage sections (singleton ID: \`${singletonDocumentIds.homepage}\`).`,
   groups: [
     { name: "hero", title: "Hero", default: true },
-    { name: "trust", title: "Trust" },
+    { name: "finder", title: "Program finder" },
     { name: "services", title: "Services" },
     { name: "destinations", title: "Destinations" },
-    { name: "process", title: "Process" },
-    { name: "testimonials", title: "Testimonials" },
+    { name: "why", title: "Why choose us" },
     { name: "cta", title: "CTA banner" },
+    { name: "seo", title: "SEO" },
   ],
   fields: [
     defineField({
@@ -33,7 +29,7 @@ export const homepage = defineType({
       fields: [
         defineField({
           name: "badge",
-          title: "Badge",
+          title: "Eyebrow / badge",
           type: "heroBadge",
           validation: (rule) => rule.required().error("Hero badge is required"),
         }),
@@ -81,52 +77,25 @@ export const homepage = defineType({
           type: "imageWithAlt",
           validation: (rule) => rule.required().error("Hero image is required"),
         }),
-        defineField({
-          name: "floatingCards",
-          title: "Floating cards",
-          type: "array",
-          of: [defineArrayMember({ type: "heroFloatingCard" })],
-          validation: (rule) => rule.max(4),
-        }),
       ],
       validation: (rule) => rule.required().error("Hero section is required"),
     }),
     defineField({
       name: "trustStats",
-      title: "Trust statistics",
+      title: "Hero statistics",
       type: "array",
-      group: "trust",
+      group: "hero",
+      description: "Exactly three stats shown under the hero CTAs.",
       of: [defineArrayMember({ type: "statistic" })],
       validation: (rule) =>
         rule.required().min(3).max(3).error("Exactly 3 trust statistics are required"),
     }),
     defineField({
-      name: "trustedUniversities",
-      title: "Trusted universities",
-      type: "object",
-      group: "trust",
-      fields: [
-        defineField({
-          name: "heading",
-          title: "Heading",
-          type: "string",
-          validation: requiredString("Heading is required", limits.heading),
-        }),
-        defineField({
-          name: "partners",
-          title: "Partner universities",
-          type: "array",
-          of: [
-            defineArrayMember({
-              type: "reference",
-              to: [{ type: "partnerUniversity" }],
-            }),
-          ],
-          validation: (rule) =>
-            rule.required().min(1).error("Add at least one partner university"),
-        }),
-      ],
-      validation: (rule) => rule.required(),
+      name: "programFinder",
+      title: "Program finder",
+      type: "programFinder",
+      group: "finder",
+      validation: (rule) => rule.required().error("Program finder is required"),
     }),
     defineField({
       name: "servicesPreview",
@@ -192,10 +161,10 @@ export const homepage = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
-      name: "processPreview",
-      title: "Application process",
+      name: "whyChooseUs",
+      title: "Why choose us",
       type: "object",
-      group: "process",
+      group: "why",
       fields: [
         defineField({
           name: "header",
@@ -204,70 +173,18 @@ export const homepage = defineType({
           validation: (rule) => rule.required(),
         }),
         defineField({
-          name: "steps",
-          title: "Process steps",
+          name: "features",
+          title: "Features",
           type: "array",
-          of: [
-            defineArrayMember({
-              type: "reference",
-              to: [{ type: "processStep" }],
-            }),
-          ],
+          of: [defineArrayMember({ type: "whyChooseUsFeature" })],
           validation: (rule) =>
-            rule.required().min(1).error("Add at least one process step"),
+            rule.required().min(1).max(4).error("Add 1–4 features"),
         }),
         defineField({
           name: "cta",
           title: "Section CTA",
-          type: "object",
-          fields: [
-            defineField({
-              name: "label",
-              title: "Label",
-              type: "string",
-              validation: requiredString("CTA label is required", limits.shortLabel),
-            }),
-            defineField({
-              name: "href",
-              title: "Link",
-              type: "string",
-              validation: requiredHref,
-            }),
-            defineField({
-              name: "supportingText",
-              title: "Supporting text",
-              type: "string",
-              validation: (rule) => rule.max(200),
-            }),
-          ],
-        }),
-      ],
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: "testimonialsPreview",
-      title: "Testimonials preview",
-      type: "object",
-      group: "testimonials",
-      fields: [
-        defineField({
-          name: "header",
-          title: "Section header",
-          type: "sectionHeader",
+          type: "ctaLink",
           validation: (rule) => rule.required(),
-        }),
-        defineField({
-          name: "testimonials",
-          title: "Testimonials",
-          type: "array",
-          of: [
-            defineArrayMember({
-              type: "reference",
-              to: [{ type: "testimonial" }],
-            }),
-          ],
-          validation: (rule) =>
-            rule.required().min(1).error("Select at least one testimonial"),
         }),
       ],
       validation: (rule) => rule.required(),
@@ -277,7 +194,14 @@ export const homepage = defineType({
       title: "CTA banner",
       type: "ctaBanner",
       group: "cta",
+      description: 'e.g. "Have Questions? We\'re Here to Help!"',
       validation: (rule) => rule.required().error("CTA banner is required"),
+    }),
+    defineField({
+      name: "seo",
+      title: "SEO",
+      type: "seo",
+      group: "seo",
     }),
   ],
   preview: {

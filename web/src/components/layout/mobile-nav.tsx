@@ -5,6 +5,7 @@ import { Menu } from "lucide-react";
 import { useState } from "react";
 
 import { NavLink } from "@/components/layout/nav-link";
+import { useNavbarScroll } from "@/components/layout/navbar-scroll-shell";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -15,7 +16,9 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { buttonStyles } from "@/lib/section-styles";
 import type { NavCta, NavItem } from "@/types/navigation";
+import { cn } from "@/lib/utils";
 
 type MobileNavProps = {
   items: NavItem[];
@@ -24,6 +27,7 @@ type MobileNavProps = {
 
 export function MobileNav({ items, cta }: MobileNavProps) {
   const [open, setOpen] = useState(false);
+  const { scrolled } = useNavbarScroll();
 
   const closeSheet = () => setOpen(false);
 
@@ -33,7 +37,12 @@ export function MobileNav({ items, cta }: MobileNavProps) {
         <Button
           variant="ghost"
           size="icon"
-          className="md:hidden"
+          className={cn(
+            "lg:hidden",
+            scrolled
+              ? "text-foreground hover:bg-muted"
+              : "text-white hover:bg-white/10 hover:text-white",
+          )}
           aria-label="Open navigation menu"
         >
           <Menu className="size-5" />
@@ -52,6 +61,7 @@ export function MobileNav({ items, cta }: MobileNavProps) {
               <li key={item.href}>
                 <NavLink
                   href={item.href}
+                  tone="dark"
                   onNavigate={closeSheet}
                   className="block rounded-md px-3 py-3 text-base"
                 >
@@ -62,7 +72,11 @@ export function MobileNav({ items, cta }: MobileNavProps) {
           </ul>
         </nav>
         <SheetFooter className="border-t border-border pt-4">
-          <Button asChild className="h-11 w-full text-sm" size="lg">
+          <Button
+            asChild
+            className={cn("h-11 w-full text-sm font-semibold", buttonStyles.gold)}
+            size="lg"
+          >
             <Link href={cta.href} onClick={closeSheet}>
               {cta.label}
             </Link>

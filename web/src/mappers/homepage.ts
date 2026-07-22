@@ -1,26 +1,25 @@
+import type { WhyChooseUsIconName } from "@/features/about/types";
 import type { CtaSectionContent } from "@/features/cta/types";
 import type { Destination, FeaturedDestinationsContent } from "@/features/destinations/types";
-import type { HeroContentData, HeroFloatingCard } from "@/features/home/types";
-import type { HeroTrustStat } from "@/features/home/types";
-import type { ProcessStep } from "@/features/process/types";
-import type { ProcessStepIconName } from "@/features/process/types";
-import type { Service, ServiceIconName, ServicesSectionContent } from "@/features/services/types";
-import type { Testimonial } from "@/features/testimonials/types";
-import { slugify } from "@/lib/slugify";
 import type {
-  SanityCtaBanner,
+  HeroContentData,
+  HeroTrustStat,
+  ProgramFinderContent,
+} from "@/features/home/types";
+import type { Service, ServiceIconName, ServicesSectionContent } from "@/features/services/types";
+import { mapCtaBanner, mapCtaLink, mapSectionHeader } from "@/mappers/shared";
+import { slugify } from "@/lib/slugify";
+import { resolveSanityImage } from "@/lib/sanity/utils/image";
+import type {
   SanityHomepageDestination,
   SanityHomepageDocument,
   SanityHomepageHero,
-  SanityHomepageProcessStep,
   SanityHomepageService,
-  SanityHomepageTestimonial,
-  SanitySectionHeader,
+  SanityProgramFinder,
   SanityStatistic,
+  SanityWhyChooseUsFeature,
 } from "@/types/sanity/homepage";
-import type { SanityCtaLink } from "@/types/sanity/global";
-import { resolveSanityImage } from "@/lib/sanity/utils/image";
-import type { HomepageContent } from "@/types/homepage";
+import type { HomepageContent, HomepageWhyChooseUsContent } from "@/types/homepage";
 
 const SERVICE_ICONS: ServiceIconName[] = [
   "graduation-cap",
@@ -31,13 +30,13 @@ const SERVICE_ICONS: ServiceIconName[] = [
   "luggage",
 ];
 
-const PROCESS_ICONS: ProcessStepIconName[] = [
-  "message-circle",
-  "map-pin",
-  "file-text",
-  "mail-check",
+const WHY_CHOOSE_ICONS: WhyChooseUsIconName[] = [
+  "badge-check",
+  "globe",
   "stamp",
-  "plane-takeoff",
+  "award",
+  "message-circle",
+  "list-checks",
 ];
 
 const EMPTY_CTA = { label: "", href: "" };
@@ -48,18 +47,13 @@ function asServiceIcon(icon: string, fallback: ServiceIconName): ServiceIconName
     : fallback;
 }
 
-function asProcessIcon(icon: string, fallback: ProcessStepIconName): ProcessStepIconName {
-  return PROCESS_ICONS.includes(icon as ProcessStepIconName)
-    ? (icon as ProcessStepIconName)
+function asWhyChooseIcon(
+  icon: string,
+  fallback: WhyChooseUsIconName,
+): WhyChooseUsIconName {
+  return WHY_CHOOSE_ICONS.includes(icon as WhyChooseUsIconName)
+    ? (icon as WhyChooseUsIconName)
     : fallback;
-}
-
-function mapSectionHeader(header: SanitySectionHeader | null | undefined) {
-  return {
-    badge: header?.badge || "",
-    heading: header?.heading || "",
-    description: header?.description || "",
-  };
 }
 
 function mapTrustStats(
@@ -96,14 +90,6 @@ function mapHero(
     };
   }
 
-  const floatingCards: HeroFloatingCard[] = (hero.floatingCards ?? []).map((card, index) => ({
-    id: slugify(card.title) || `floating-card-${index}`,
-    title: card.title || "",
-    subtitle: card.subtitle || "",
-    icon: card.icon === "offer" ? "offer" : "check",
-    position: card.position === "top-right" ? "top-right" : "bottom-left",
-  }));
-
   return {
     badge: {
       text: hero.badge?.text || "",
@@ -124,8 +110,49 @@ function mapHero(
       },
     },
     stats: trustStats,
-    floatingCards,
+    floatingCards: [],
     image: resolveSanityImage(hero.image, { src: "", alt: "" }),
+  };
+}
+
+function mapProgramFinder(
+  finder: SanityProgramFinder | null | undefined,
+  options?: {
+    destinations: ProgramFinderContent["destinations"];
+    categories: ProgramFinderContent["categories"];
+    levels: ProgramFinderContent["levels"];
+  },
+): ProgramFinderContent {
+  const theme = finder?.backgroundTheme;
+  const backgroundTheme =
+    theme === "beige" || theme === "navy" || theme === "light" ? theme : "navy";
+
+  const cta = finder?.cta
+    ? mapCtaLink(finder.cta)
+    : { ...EMPTY_CTA, href: "/programs" };
+
+  return {
+    heading: finder?.heading || finder?.title || "",
+    description: finder?.description || "",
+    destinationLabel: finder?.destinationLabel || "Destination",
+    destinationPlaceholder:
+      finder?.destinationPlaceholder || "Select destination",
+    courseLabel: finder?.courseLabel || "Course",
+    coursePlaceholder: finder?.coursePlaceholder || "Select course",
+    studyLevelLabel: finder?.studyLevelLabel || "Study level",
+    studyLevelPlaceholder:
+      finder?.studyLevelPlaceholder || "Select level",
+    backgroundTheme,
+    showDestination: finder?.showDestination ?? true,
+    showCourse: finder?.showCourse ?? true,
+    showStudyLevel: finder?.showStudyLevel ?? true,
+    destinations: options?.destinations ?? [],
+    categories: options?.categories ?? [],
+    levels: options?.levels ?? [],
+    cta: {
+      ...cta,
+      href: cta.href || "/programs",
+    },
   };
 }
 
@@ -139,7 +166,7 @@ function mapService(service: SanityHomepageService): Service {
     description: service.description || "",
     icon: asServiceIcon(service.icon, "graduation-cap"),
     ctaLabel: service.ctaLabel || "",
-    href: `/services/${slug}`,
+    href: `/services#${slug}`,
   };
 }
 
@@ -163,65 +190,32 @@ function mapDestination(destination: SanityHomepageDestination): Destination {
   };
 }
 
-function mapProcessStep(step: SanityHomepageProcessStep, index: number): ProcessStep {
-  return {
-    id: slugify(step.title) || `step-${step.step ?? index + 1}`,
-    step: step.step ?? index + 1,
-    title: step.title || "",
-    description: step.description || "",
-    icon: asProcessIcon(step.icon, "message-circle"),
-  };
-}
-
-function mapTestimonial(testimonial: SanityHomepageTestimonial): Testimonial {
-  return {
-    id: slugify(testimonial.name) || testimonial._id,
-    name: testimonial.name || "",
-    destination: testimonial.destination || "",
-    university: testimonial.university || "",
-    course: testimonial.course || "",
-    rating: testimonial.rating ?? 5,
-    quote: testimonial.quote || "",
-    featured: testimonial.featured ?? false,
-    image: resolveSanityImage(testimonial.image, {
-      src: "",
-      alt: testimonial.name || "",
-    }),
-  };
-}
-
-function mapCtaBanner(
-  banner: SanityCtaBanner | null | undefined,
-): CtaSectionContent {
-  if (!banner) {
-    return {
-      badge: "",
-      heading: "",
-      description: "",
-      primaryCta: { ...EMPTY_CTA },
-      secondaryCta: { ...EMPTY_CTA },
-      trustMicrocopy: "",
-    };
-  }
-
-  const mapLink = (link: SanityCtaLink | undefined) => ({
-    label: link?.label || "",
-    href: link?.href || "",
-    external: link?.external ?? false,
-  });
+function mapWhyChooseUs(
+  section: SanityHomepageDocument["whyChooseUs"] | null | undefined,
+): HomepageWhyChooseUsContent {
+  const header = mapSectionHeader(section?.header);
+  const features =
+    section?.features?.map((feature: SanityWhyChooseUsFeature, index) => ({
+      id: slugify(feature.title) || `feature-${index}`,
+      title: feature.title || "",
+      description: feature.description || "",
+      icon: asWhyChooseIcon(feature.icon, "badge-check"),
+    })) ?? [];
 
   return {
-    badge: banner.badge || "",
-    heading: banner.heading || "",
-    description: banner.description || "",
-    primaryCta: mapLink(banner.primaryCta),
-    secondaryCta: mapLink(banner.secondaryCta),
-    trustMicrocopy: banner.trustMicrocopy || "",
+    ...header,
+    features,
+    cta: mapCtaLink(section?.cta),
   };
 }
 
 export function mapHomepage(
   document: SanityHomepageDocument | null | undefined,
+  finderOptions?: {
+    destinations: ProgramFinderContent["destinations"];
+    categories: ProgramFinderContent["categories"];
+    levels: ProgramFinderContent["levels"];
+  },
 ): HomepageContent {
   if (!document) {
     throw new Error("Missing Sanity document");
@@ -245,23 +239,17 @@ export function mapHomepage(
     viewAllHref: viewAll?.href || "",
   };
 
-  const processSection = mapSectionHeader(document.processPreview?.header);
-  const processCta = document.processPreview?.cta;
+  const cta: CtaSectionContent = mapCtaBanner(document.ctaBanner);
 
   return {
     hero,
     trustStats,
-    trustedUniversities: {
-      heading: document.trustedUniversities?.heading || "",
-      partners:
-        document.trustedUniversities?.partners
-          ?.map((partner) => partner.name)
-          .filter(Boolean) ?? [],
-    },
+    programFinder: mapProgramFinder(document.programFinder, finderOptions),
     servicesPreview: {
       section: servicesPreviewSection,
       services:
-        document.servicesPreview?.services?.map((service) => mapService(service)) ?? [],
+        document.servicesPreview?.services?.map((service) => mapService(service)) ??
+        [],
     },
     featuredDestinations: {
       section: featuredDestinationsSection,
@@ -270,28 +258,8 @@ export function mapHomepage(
           mapDestination(destination),
         ) ?? [],
     },
-    processPreview: {
-      section: {
-        ...processSection,
-        cta: {
-          label: processCta?.label || "",
-          href: processCta?.href || "",
-          supportingText: processCta?.supportingText || "",
-        },
-      },
-      steps:
-        document.processPreview?.steps?.map((step, index) =>
-          mapProcessStep(step, index),
-        ) ?? [],
-    },
-    testimonialsPreview: {
-      section: mapSectionHeader(document.testimonialsPreview?.header),
-      testimonials:
-        document.testimonialsPreview?.testimonials?.map((testimonial) =>
-          mapTestimonial(testimonial),
-        ) ?? [],
-    },
-    cta: mapCtaBanner(document.ctaBanner),
+    whyChooseUs: mapWhyChooseUs(document.whyChooseUs),
+    cta,
     seo: document.seo,
   };
 }

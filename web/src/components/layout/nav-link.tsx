@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { useNavbarScroll } from "@/components/layout/navbar-scroll-shell";
 import { cn } from "@/lib/utils";
 import { focusRing, linkTransition } from "@/lib/section-styles";
 
@@ -11,6 +12,8 @@ type NavLinkProps = {
   children: React.ReactNode;
   className?: string;
   onNavigate?: () => void;
+  /** Force light-on-dark or dark-on-light styles (e.g. mobile sheet). */
+  tone?: "auto" | "light" | "dark";
 };
 
 function isActivePath(pathname: string, href: string) {
@@ -21,9 +24,18 @@ function isActivePath(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-export function NavLink({ href, children, className, onNavigate }: NavLinkProps) {
+export function NavLink({
+  href,
+  children,
+  className,
+  onNavigate,
+  tone = "auto",
+}: NavLinkProps) {
   const pathname = usePathname();
+  const { scrolled } = useNavbarScroll();
   const active = isActivePath(pathname, href);
+  const useDark =
+    tone === "dark" || (tone === "auto" && scrolled);
 
   return (
     <Link
@@ -31,12 +43,16 @@ export function NavLink({ href, children, className, onNavigate }: NavLinkProps)
       onClick={onNavigate}
       aria-current={active ? "page" : undefined}
       className={cn(
-        "rounded-md px-3 py-2 text-sm",
+        "rounded-md px-3 py-2 text-sm font-medium",
         linkTransition,
         focusRing,
-        active
-          ? "bg-muted/80 font-medium text-foreground"
-          : "text-muted-foreground hover:bg-muted/50 hover:text-foreground",
+        useDark
+          ? active
+            ? "bg-muted font-semibold text-primary"
+            : "text-foreground/80 hover:bg-muted/60 hover:text-primary"
+          : active
+            ? "bg-white/15 font-semibold text-white"
+            : "text-white/90 hover:bg-white/10 hover:text-white",
         className,
       )}
     >

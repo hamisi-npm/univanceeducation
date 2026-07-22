@@ -8,33 +8,42 @@ type ServiceSectionProps = {
   section: ServicesSectionContent;
   services: Service[];
   className?: string;
+  layout?: "grid" | "row";
 };
 
-export function ServiceSection({ section, services, className }: ServiceSectionProps) {
-
+export function ServiceSection({
+  section,
+  services,
+  className,
+  layout = "grid",
+}: ServiceSectionProps) {
   return (
     <section
       aria-labelledby="services-section-heading"
-      className={cn(sectionStyles.sectionBackground, sectionStyles.padding, className)}
+      className={cn(
+        sectionStyles.sectionBeige,
+        layout === "row" ? "pb-16 pt-10 sm:pb-20 sm:pt-12 lg:pb-24 lg:pt-14" : sectionStyles.padding,
+        className,
+      )}
     >
-      <Container>
+      <Container className={layout === "row" ? "max-w-7xl" : undefined}>
         <div className={sectionStyles.stack}>
-          <div className={sectionStyles.header}>
-            <span
-              className={cn(
-                sectionStyles.badge,
-                sectionStyles.badgeOnBackground,
-              )}
+          <div className={sectionStyles.headerCentered}>
+            <span className={sectionStyles.badgeGold}>{section.badge}</span>
+            <h2
+              id="services-section-heading"
+              className={sectionStyles.heading}
             >
-              {section.badge}
-            </span>
-            <h2 id="services-section-heading" className={sectionStyles.heading}>
               {section.heading}
             </h2>
-            <p className={sectionStyles.description}>{section.description}</p>
+            {section.description ? (
+              <p className={cn(sectionStyles.description, "mx-auto")}>
+                {section.description}
+              </p>
+            ) : null}
           </div>
 
-          <ServiceGrid services={services} />
+          <ServiceGrid services={services} layout={layout} />
         </div>
       </Container>
     </section>

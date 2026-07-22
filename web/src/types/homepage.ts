@@ -1,18 +1,27 @@
+import type { WhyChooseUsContent, WhyChooseUsFeature } from "@/features/about/types";
 import type { CtaSectionContent } from "@/features/cta/types";
 import type { Destination, FeaturedDestinationsContent } from "@/features/destinations/types";
-import type { HeroContentData, HeroTrustStat } from "@/features/home/types";
-import type { ProcessSectionContent, ProcessStep } from "@/features/process/types";
+import type {
+  HeroContentData,
+  HeroTrustStat,
+  ProgramFinderContent,
+} from "@/features/home/types";
 import type { Service, ServicesSectionContent } from "@/features/services/types";
-import type { Testimonial, TestimonialsSectionContent } from "@/features/testimonials/types";
 import type { CmsSeo } from "@/types/cms-seo";
+
+export type HomepageWhyChooseUsContent = WhyChooseUsContent & {
+  cta: {
+    label: string;
+    href: string;
+    external?: boolean;
+  };
+  features: WhyChooseUsFeature[];
+};
 
 export type HomepageContent = {
   hero: HeroContentData;
   trustStats: HeroTrustStat[];
-  trustedUniversities: {
-    heading: string;
-    partners: string[];
-  };
+  programFinder: ProgramFinderContent;
   servicesPreview: {
     section: ServicesSectionContent;
     services: Service[];
@@ -21,14 +30,7 @@ export type HomepageContent = {
     section: FeaturedDestinationsContent;
     destinations: Destination[];
   };
-  processPreview: {
-    section: ProcessSectionContent;
-    steps: ProcessStep[];
-  };
-  testimonialsPreview: {
-    section: TestimonialsSectionContent;
-    testimonials: Testimonial[];
-  };
+  whyChooseUs: HomepageWhyChooseUsContent;
   cta: CtaSectionContent;
   seo?: CmsSeo;
 };

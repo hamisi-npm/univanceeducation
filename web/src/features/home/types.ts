@@ -35,3 +35,31 @@ export type HeroContentData = {
     alt: string;
   };
 };
+
+export type ProgramFinderOption = {
+  value: string;
+  label: string;
+};
+
+export type ProgramFinderContent = {
+  heading: string;
+  description: string;
+  destinationLabel: string;
+  destinationPlaceholder: string;
+  courseLabel: string;
+  coursePlaceholder: string;
+  studyLevelLabel: string;
+  studyLevelPlaceholder: string;
+  backgroundTheme: "light" | "navy" | "beige";
+  showDestination: boolean;
+  showCourse: boolean;
+  showStudyLevel: boolean;
+  destinations: ProgramFinderOption[];
+  categories: ProgramFinderOption[];
+  levels: ProgramFinderOption[];
+  cta: {
+    label: string;
+    href: string;
+    external?: boolean;
+  };
+};

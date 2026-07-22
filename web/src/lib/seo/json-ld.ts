@@ -1,5 +1,6 @@
 import type { BlogArticle } from "@/features/blog/types";
 import type { SiteConfig } from "@/types/site";
+import type { ProgramDetail } from "@/types/programs";
 import {
   getAbsoluteUrl,
   type BreadcrumbItem,
@@ -129,5 +130,48 @@ export function blogItemListJsonLd(
       url: getAbsoluteUrl(`/blog/${article.slug}`, site.url),
       name: article.title,
     })),
+  };
+}
+
+export function courseJsonLd(program: ProgramDetail, site: SiteConfig): JsonLd {
+  const provider = program.university.slug
+    ? {
+        "@type": "CollegeOrUniversity",
+        name: program.university.name,
+        url: getAbsoluteUrl(
+          `/universities/${program.university.slug}`,
+          site.url,
+        ),
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: program.university.city || undefined,
+          addressCountry: program.university.destinationCountry || undefined,
+        },
+      }
+    : {
+        "@type": "Organization",
+        name: site.name,
+        url: getAbsoluteUrl("/", site.url),
+      };
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    name: program.title,
+    description: program.shortDescription,
+    url: getAbsoluteUrl(`/programs/${program.slug}`, site.url),
+    image: program.image.src || undefined,
+    provider,
+    educationalLevel: program.studyLevelName || undefined,
+    timeRequired: program.duration || undefined,
+    inLanguage: program.language || undefined,
+    offers: program.annualTuition
+      ? {
+          "@type": "Offer",
+          category: "Tuition",
+          price: program.annualTuition,
+          priceCurrency: program.currency || "USD",
+        }
+      : undefined,
   };
 }

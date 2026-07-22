@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { DetailJsonLd } from "@/components/seo/detail-json-ld";
 import { DestinationDetailView } from "@/features/destinations/components/destination-detail-view";
 import { createMetadata } from "@/lib/metadata";
+import { getProgramsByDestination } from "@/services/programs";
 import { getSiteConfig } from "@/services/site";
 import {
   getDestinationBySlug,
@@ -46,6 +47,8 @@ export default async function DestinationPage({ params }: DestinationPageProps) 
     notFound();
   }
 
+  const programs = await getProgramsByDestination(destination.slug, 6);
+
   const breadcrumbs = [
     { name: "Home", path: "/" },
     { name: "Destinations", path: "/destinations" },
@@ -55,7 +58,7 @@ export default async function DestinationPage({ params }: DestinationPageProps) 
   return (
     <main id="main-content">
       <DetailJsonLd breadcrumbs={breadcrumbs} />
-      <DestinationDetailView destination={destination} />
+      <DestinationDetailView destination={destination} programs={programs} />
     </main>
   );
 }

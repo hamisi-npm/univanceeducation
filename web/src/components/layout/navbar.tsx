@@ -6,8 +6,10 @@ import { MobileNav } from "@/components/layout/mobile-nav";
 import { NavLink } from "@/components/layout/nav-link";
 import { NavbarScrollShell } from "@/components/layout/navbar-scroll-shell";
 import { Button } from "@/components/ui/button";
+import { buttonStyles } from "@/lib/section-styles";
 import type { NavCta, NavItem } from "@/types/navigation";
 import type { SiteConfig } from "@/types/site";
+import { cn } from "@/lib/utils";
 
 type NavbarProps = {
   site: SiteConfig;
@@ -24,17 +26,15 @@ export function Navbar({ site, navigation }: NavbarProps) {
     <NavbarScrollShell>
       <Container>
         <nav
-          className="flex h-14 items-center justify-between gap-6"
+          className="flex h-16 items-center justify-between gap-6"
           aria-label="Main navigation"
         >
           <Logo site={site} priority />
 
-          <ul className="hidden items-center gap-1 md:flex">
+          <ul className="hidden items-center gap-0.5 lg:flex">
             {items.map((item) => (
               <li key={item.href}>
-                <NavLink href={item.href} className="rounded-md px-3 py-2">
-                  {item.title}
-                </NavLink>
+                <NavLink href={item.href}>{item.title}</NavLink>
               </li>
             ))}
           </ul>
@@ -43,7 +43,10 @@ export function Navbar({ site, navigation }: NavbarProps) {
             <Button
               asChild
               size="sm"
-              className="hidden h-8 px-4 text-xs md:inline-flex"
+              className={cn(
+                "hidden h-9 px-4 text-xs font-semibold md:inline-flex",
+                buttonStyles.gold,
+              )}
             >
               <Link href={cta.href}>{cta.label}</Link>
             </Button>

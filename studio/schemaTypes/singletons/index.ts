@@ -17,6 +17,7 @@ export const singletonDocumentIds = {
   servicesPage: "servicesPage",
   destinationsPage: "destinationsPage",
   universitiesPage: "universitiesPage",
+  programsPage: "programsPage",
   blogPage: "blogPage",
   studyGuidesPage: "studyGuidesPage",
 } as const;

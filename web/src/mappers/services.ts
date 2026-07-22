@@ -57,7 +57,7 @@ function mapService(service: SanityServiceDocument): Service {
     description: service.description || "",
     icon: asServiceIcon(service.icon, "graduation-cap"),
     ctaLabel: service.cta?.label || "",
-    href: `/services/${slug}`,
+    href: `/services#${slug}`,
   };
 }
 
