@@ -46,7 +46,7 @@ export function NavbarScrollShell({ children }: NavbarScrollShellProps) {
           "fixed top-0 z-50 w-full transition-[background-color,border-color,backdrop-filter,box-shadow] duration-300 ease-out",
           scrolled
             ? "border-b border-border/80 bg-background/95 shadow-sm backdrop-blur-sm"
-            : "border-b border-transparent bg-brand-navy/90 backdrop-blur-sm",
+            : "border-b border-transparent bg-foreground/55 backdrop-blur-sm",
         )}
       >
         {children}

@@ -34,12 +34,12 @@ export function CtaSection({
         <Container>
           <div className="flex flex-col items-start gap-6 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
             <div className="flex min-w-0 items-start gap-4 sm:items-center">
-              <div className={cn(cardStyles.iconCircle, "bg-brand-gold/15 text-brand-gold")}>
+              <div className={cn(cardStyles.iconCircle, "bg-white/15 text-brand-beige")}>
                 <Headset className="size-6" aria-hidden="true" />
               </div>
               <div className="space-y-1">
                 {content.badge ? (
-                  <p className="text-sm font-semibold text-brand-gold">
+                  <p className="text-sm font-semibold text-brand-beige">
                     {content.badge}
                   </p>
                 ) : null}
@@ -61,8 +61,7 @@ export function CtaSection({
                 asChild
                 size="lg"
                 className={cn(
-                  buttonStyles.gold,
-                  "h-11 w-full gap-2 px-6 text-sm font-semibold sm:w-auto",
+                  "h-11 w-full gap-2 rounded-lg border-transparent bg-white px-6 text-sm font-semibold text-primary shadow-sm hover:bg-brand-beige sm:w-auto",
                 )}
               >
                 <Link href={content.primaryCta.href}>

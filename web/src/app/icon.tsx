@@ -1,10 +1,8 @@
-import { SANITY_REVALIDATE_SECONDS } from "@/lib/sanity/cache-tags";
 import { renderBrandIcon } from "@/lib/brand-icon";
 import { getSiteConfig } from "@/services/site";
 
 export const size = { width: 32, height: 32 };
 export const contentType = "image/png";
-export const revalidate = SANITY_REVALIDATE_SECONDS;
 
 export default async function Icon() {
   let imageSrc = "";

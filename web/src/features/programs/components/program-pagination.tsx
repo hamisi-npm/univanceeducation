@@ -46,7 +46,7 @@ export function ProgramPagination({
       {prevPage ? (
         <Link
           href={buildPageHref(prevPage, filters)}
-          className="inline-flex items-center gap-1 text-sm font-medium text-brand-navy hover:text-brand-gold"
+          className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:text-brand-navy"
           rel="prev"
         >
           <ChevronLeft className="size-4" aria-hidden="true" />
@@ -66,7 +66,7 @@ export function ProgramPagination({
       {nextPage ? (
         <Link
           href={buildPageHref(nextPage, filters)}
-          className="inline-flex items-center gap-1 text-sm font-medium text-brand-navy hover:text-brand-gold"
+          className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:text-brand-navy"
           rel="next"
         >
           Next

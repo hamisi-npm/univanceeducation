@@ -55,7 +55,7 @@ export function ProgramsListingView({
           <div className="mb-8 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <h2
               id="programs-results-heading"
-              className="text-lg font-semibold text-brand-navy"
+              className="text-lg font-semibold text-foreground"
             >
               {resultsLabel}
             </h2>

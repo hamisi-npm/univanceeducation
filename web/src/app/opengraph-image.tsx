@@ -53,7 +53,7 @@ export default async function OpenGraphImage() {
               letterSpacing: "-0.03em",
               lineHeight: 1.1,
               maxWidth: 900,
-              color: brandColors.footer,
+              color: brandColors.text,
             }}
           >
             {tagline}

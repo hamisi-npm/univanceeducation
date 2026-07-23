@@ -38,7 +38,9 @@ export function CtaActions({
           size="lg"
           className={cn(
             buttonStyles.responsiveLg,
-            buttonStyles.gold,
+            onDark
+              ? "rounded-lg border-transparent bg-white text-primary shadow-sm hover:bg-brand-beige"
+              : buttonStyles.gold,
             "h-11 gap-2 font-semibold",
           )}
         >

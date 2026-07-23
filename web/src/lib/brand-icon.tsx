@@ -14,7 +14,7 @@ type BrandIconOptions = {
 
 /**
  * Renders a square brand icon for `/icon` and `/apple-icon`.
- * Prefers the CMS image; falls back to a navy "UE" monogram.
+ * Prefers the CMS image; falls back to a maroon "UE" monogram.
  */
 export function renderBrandIcon({
   size,

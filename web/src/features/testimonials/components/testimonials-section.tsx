@@ -38,7 +38,7 @@ export function TestimonialsSection({
             </span>
             <h2
               id="testimonials-section-heading"
-              className={cn(sectionStyles.heading, "text-brand-navy")}
+              className={cn(sectionStyles.heading, "text-foreground")}
             >
               {section.heading}
             </h2>

@@ -62,10 +62,7 @@ export function ServiceCard({
           )}
         >
           <Icon
-            className={cn(
-              "size-5",
-              centered ? "text-brand-gold" : cardStyles.icon,
-            )}
+            className={cn("size-5", centered ? "text-white" : cardStyles.icon)}
             aria-hidden="true"
           />
         </div>

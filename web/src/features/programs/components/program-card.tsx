@@ -51,7 +51,7 @@ export function ProgramCard({
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
         {program.scholarshipAvailable ? (
-          <span className="absolute right-3 top-3 rounded-md bg-brand-gold px-2.5 py-1 text-xs font-semibold text-brand-gold-foreground">
+          <span className="absolute right-3 top-3 rounded-md bg-primary px-2.5 py-1 text-xs font-semibold text-primary-foreground">
             Scholarship
           </span>
         ) : null}
@@ -75,7 +75,7 @@ export function ProgramCard({
             <Link
               href={detailsHref}
               className={cn(
-                "rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/60",
+                "rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50",
               )}
             >
               {program.title}

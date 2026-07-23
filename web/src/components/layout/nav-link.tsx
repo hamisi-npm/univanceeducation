@@ -48,8 +48,8 @@ export function NavLink({
         focusRing,
         useDark
           ? active
-            ? "bg-muted font-semibold text-primary"
-            : "text-foreground/80 hover:bg-muted/60 hover:text-primary"
+            ? "bg-primary/5 font-semibold text-primary"
+            : "text-foreground/80 hover:bg-muted/60 hover:text-brand-navy"
           : active
             ? "bg-white/15 font-semibold text-white"
             : "text-white/90 hover:bg-white/10 hover:text-white",

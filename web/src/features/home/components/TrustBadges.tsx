@@ -23,8 +23,8 @@ export function TrustBadges({ stats, className }: TrustBadgesProps) {
 
         return (
           <div key={stat.label} className="flex items-start gap-3">
-            <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-brand-gold/15 text-brand-gold">
-              <Icon className="size-5" aria-hidden="true" />
+            <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-brand-navy/20 text-brand-beige">
+              <Icon className="size-5 text-brand-beige" aria-hidden="true" />
             </div>
             <div className="min-w-0 space-y-0.5">
               <dt className="sr-only">{stat.label}</dt>

@@ -26,7 +26,7 @@ type HeroProps = {
 export function Hero({ content, trustStats, programFinder, site }: HeroProps) {
   return (
     <section aria-labelledby="hero-heading" className="relative bg-brand-beige">
-      <div className="relative -mt-16 min-h-[78vh] overflow-hidden bg-brand-navy pt-16 sm:min-h-[82vh]">
+      <div className="relative -mt-16 min-h-[78vh] overflow-hidden bg-foreground pt-16 sm:min-h-[82vh]">
         <div className="absolute inset-0">
           <Image
             src={content.image.src}
@@ -40,11 +40,11 @@ export function Hero({ content, trustStats, programFinder, site }: HeroProps) {
             className="object-cover object-center"
           />
           <div
-            className="absolute inset-0 bg-gradient-to-r from-brand-navy/95 via-brand-navy/75 to-brand-navy/35"
+            className="absolute inset-0 bg-gradient-to-r from-foreground/90 via-foreground/65 to-foreground/25"
             aria-hidden="true"
           />
           <div
-            className="absolute inset-0 bg-gradient-to-t from-brand-navy/80 via-transparent to-brand-navy/40"
+            className="absolute inset-0 bg-gradient-to-t from-foreground/75 via-transparent to-foreground/35"
             aria-hidden="true"
           />
         </div>

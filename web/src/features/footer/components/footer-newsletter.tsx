@@ -49,7 +49,7 @@ export function FooterNewsletter({ content, className }: FooterNewsletterProps) 
               </div>
               <Button
                 type="button"
-                className="h-10 w-full shrink-0 sm:h-9 sm:w-auto"
+                className="h-10 w-full shrink-0 rounded-lg border-transparent bg-white text-primary hover:bg-brand-beige sm:h-9 sm:w-auto"
               >
                 {content.submitLabel}
               </Button>

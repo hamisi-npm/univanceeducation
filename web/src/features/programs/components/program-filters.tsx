@@ -31,7 +31,7 @@ export function ProgramFilters({ chrome, options, current }: ProgramFiltersProps
           {chrome.heading ? (
             <h2
               id="programs-filters-heading"
-              className="text-lg font-semibold tracking-tight text-brand-navy"
+              className="text-lg font-semibold tracking-tight text-foreground"
             >
               {chrome.heading}
             </h2>

@@ -163,7 +163,7 @@ export function ProgramOverview({ program }: { program: ProgramDetail }) {
           </div>
           {program.highlights.length > 0 ? (
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-brand-navy">Highlights</h3>
+              <h3 className="text-lg font-semibold text-foreground">Highlights</h3>
               <ul className="space-y-2">
                 {program.highlights.map((item) => (
                   <li
@@ -206,7 +206,7 @@ export function ProgramRequirements({ program }: { program: ProgramDetail }) {
           <Paragraphs paragraphs={program.entryRequirements} />
           {program.englishRequirements.length > 0 ? (
             <div className="space-y-3">
-              <h3 className="text-lg font-semibold text-brand-navy">
+              <h3 className="text-lg font-semibold text-foreground">
                 English requirements
               </h3>
               <Paragraphs paragraphs={program.englishRequirements} />
@@ -214,7 +214,7 @@ export function ProgramRequirements({ program }: { program: ProgramDetail }) {
           ) : null}
           {program.requiredDocuments.length > 0 ? (
             <div className="space-y-3">
-              <h3 className="text-lg font-semibold text-brand-navy">
+              <h3 className="text-lg font-semibold text-foreground">
                 Required documents
               </h3>
               <Paragraphs paragraphs={program.requiredDocuments} />
@@ -246,14 +246,14 @@ export function ProgramFees({ program }: { program: ProgramDetail }) {
           <dl className="grid gap-4 sm:grid-cols-2">
             <div className="rounded-lg border border-border bg-card p-5">
               <dt className="text-sm font-medium text-foreground">Annual tuition</dt>
-              <dd className="mt-2 font-mono text-lg text-brand-navy">
+              <dd className="mt-2 font-mono text-lg text-primary">
                 {program.tuitionLabel || "Contact us for details"}
               </dd>
             </div>
             {program.applicationFee != null ? (
               <div className="rounded-lg border border-border bg-card p-5">
                 <dt className="text-sm font-medium text-foreground">Application fee</dt>
-                <dd className="mt-2 font-mono text-lg text-brand-navy">
+                <dd className="mt-2 font-mono text-lg text-primary">
                   {new Intl.NumberFormat("en-US", {
                     style: "currency",
                     currency: program.currency || "USD",
@@ -285,7 +285,7 @@ export function ProgramScholarships({ program }: { program: ProgramDetail }) {
             Scholarships
           </h2>
           {program.scholarshipAvailable ? (
-            <p className="text-sm font-medium text-brand-navy">
+            <p className="text-sm font-medium text-primary">
               Scholarships are available for this program.
             </p>
           ) : null}
@@ -352,7 +352,7 @@ export function ProgramUniversityInfo({ program }: { program: ProgramDetail }) {
             <h2 id="program-university-heading" className={sectionStyles.heading}>
               About the university
             </h2>
-            <h3 className="text-xl font-semibold text-brand-navy">{university.name}</h3>
+            <h3 className="text-xl font-semibold text-foreground">{university.name}</h3>
             <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
               <MapPin className="size-3.5" aria-hidden="true" />
               {university.city}

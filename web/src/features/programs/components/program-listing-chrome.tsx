@@ -13,7 +13,7 @@ type ProgramEmptyStateProps = {
 export function ProgramEmptyState({ content }: ProgramEmptyStateProps) {
   return (
     <div className="rounded-xl border border-dashed border-border bg-muted/30 px-6 py-16 text-center">
-      <h2 className="text-xl font-semibold text-brand-navy">{content.heading}</h2>
+      <h2 className="text-xl font-semibold text-foreground">{content.heading}</h2>
       <p className="mx-auto mt-3 max-w-md text-sm text-muted-foreground">
         {content.description}
       </p>

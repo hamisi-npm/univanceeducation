@@ -33,9 +33,13 @@
     --color-secondary: var(--secondary);
     --color-primary-foreground: var(--primary-foreground);
     --color-primary: var(--primary);
+    /* brand-gold kept as maroon alias for legacy class names */
     --color-brand-gold: var(--brand-gold);
     --color-brand-gold-foreground: var(--brand-gold-foreground);
+    --color-brand-maroon: var(--brand-maroon);
+    --color-brand-maroon-foreground: var(--brand-maroon-foreground);
     --color-brand-beige: var(--brand-beige);
+    /* brand-navy = royal blue accent (token name retained for compatibility) */
     --color-brand-navy: var(--brand-navy);
     --color-popover-foreground: var(--popover-foreground);
     --color-popover: var(--popover);
@@ -60,54 +64,72 @@
 }
 
 :root {
-    /* Brand: #0057B8 blue, #800020 maroon, #F5E6D3 beige, #D4AF37 gold */
-    --background: oklch(0.99 0.008 85);
-    --foreground: oklch(0.28 0.06 252);
+    /*
+      Official Univance palette
+      Primary maroon #800020 · Accent blue #0057B8 · Beige #F5E6D3
+      Text #1F2937 · Muted #4B5563 · Border #E5E7EB · White #FFFFFF
+    */
+    --background: oklch(1 0 0);
+    --foreground: oklch(0.278 0.03 256); /* #1F2937 */
     --card: oklch(1 0 0);
-    --card-foreground: oklch(0.28 0.06 252);
+    --card-foreground: oklch(0.278 0.03 256);
     --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.28 0.06 252);
-    /* Primary blue #0057B8 — also used as brand-navy for dark sections */
-    --primary: oklch(0.488 0.155 252);
-    --primary-foreground: oklch(0.99 0 0);
-    --secondary: oklch(0.345 0.145 15);
-    --secondary-foreground: oklch(0.99 0 0);
+    --popover-foreground: oklch(0.278 0.03 256);
+
+    /* Primary action = Deep Maroon #800020 */
+    --primary: oklch(0.345 0.145 15);
+    --primary-foreground: oklch(1 0 0);
+
+    /* Soft supporting surface (not competing with primary) */
+    --secondary: oklch(0.96 0.01 75);
+    --secondary-foreground: oklch(0.345 0.145 15);
+
     /* Warm beige #F5E6D3 */
     --muted: oklch(0.932 0.038 75.5);
-    --muted-foreground: oklch(0.45 0.04 252);
+    --muted-foreground: oklch(0.45 0.025 256); /* ~#4B5563 */
     --accent: oklch(0.932 0.038 75.5);
-    --accent-foreground: oklch(0.28 0.06 252);
-    /* Gold #D4AF37 */
-    --brand-gold: oklch(0.78 0.12 90);
-    --brand-gold-foreground: oklch(0.22 0.05 252);
+    --accent-foreground: oklch(0.278 0.03 256);
+
+    /* Maroon aliases — brand-gold remapped so legacy utilities stay on-brand */
+    --brand-maroon: oklch(0.345 0.145 15);
+    --brand-maroon-foreground: oklch(1 0 0);
+    --brand-gold: var(--brand-maroon);
+    --brand-gold-foreground: var(--brand-maroon-foreground);
     --brand-beige: oklch(0.932 0.038 75.5);
-    /* Same blue as primary — one navy surface across homepage */
+
+    /* Royal Blue #0057B8 — supporting accent only */
     --brand-navy: oklch(0.488 0.155 252);
+
     --destructive: oklch(0.577 0.245 27.325);
-    --border: oklch(0.88 0.03 75);
-    --input: oklch(0.88 0.03 75);
-    --ring: oklch(0.488 0.155 252);
-    --chart-1: oklch(0.488 0.155 252);
-    --chart-2: oklch(0.345 0.145 15);
-    --chart-3: oklch(0.78 0.12 90);
-    --chart-4: oklch(0.439 0 0);
-    --chart-5: oklch(0.371 0 0);
+    --border: oklch(0.928 0.006 256); /* #E5E7EB */
+    --input: oklch(0.928 0.006 256);
+    --ring: oklch(0.345 0.145 15); /* maroon focus */
+
+    --chart-1: oklch(0.345 0.145 15);
+    --chart-2: oklch(0.488 0.155 252);
+    --chart-3: oklch(0.932 0.038 75.5);
+    --chart-4: oklch(0.45 0.025 256);
+    --chart-5: oklch(0.55 0.02 256);
     --radius: 0.625rem;
-    --sidebar: oklch(0.99 0.008 85);
-    --sidebar-foreground: oklch(0.28 0.06 252);
-    --sidebar-primary: oklch(0.488 0.155 252);
-    --sidebar-primary-foreground: oklch(0.99 0 0);
+
+    --sidebar: oklch(1 0 0);
+    --sidebar-foreground: oklch(0.278 0.03 256);
+    --sidebar-primary: oklch(0.345 0.145 15);
+    --sidebar-primary-foreground: oklch(1 0 0);
     --sidebar-accent: oklch(0.932 0.038 75.5);
-    --sidebar-accent-foreground: oklch(0.28 0.06 252);
-    --sidebar-border: oklch(0.88 0.03 75);
-    --sidebar-ring: oklch(0.488 0.155 252);
+    --sidebar-accent-foreground: oklch(0.278 0.03 256);
+    --sidebar-border: oklch(0.928 0.006 256);
+    --sidebar-ring: oklch(0.345 0.145 15);
+
     --whatsapp: oklch(0.705 0.174 150.08);
     --whatsapp-foreground: oklch(1 0 0);
-    --footer: oklch(0.35 0.12 252);
-    --footer-foreground: oklch(0.99 0 0);
-    --footer-muted: oklch(0.82 0.04 252);
-    --footer-accent: oklch(0.78 0.12 90);
-    --footer-link-hover: oklch(0.72 0.12 252);
+
+    /* Footer = Deep Maroon; links = beige; hover = white; accent = blue */
+    --footer: oklch(0.345 0.145 15);
+    --footer-foreground: oklch(1 0 0);
+    --footer-muted: oklch(0.932 0.038 75.5);
+    --footer-accent: oklch(0.488 0.155 252);
+    --footer-link-hover: oklch(1 0 0);
 }
 
 .dark {
@@ -117,8 +139,8 @@
     --card-foreground: oklch(0.985 0 0);
     --popover: oklch(0.205 0 0);
     --popover-foreground: oklch(0.985 0 0);
-    --primary: oklch(0.922 0 0);
-    --primary-foreground: oklch(0.205 0 0);
+    --primary: oklch(0.55 0.14 15);
+    --primary-foreground: oklch(0.99 0 0);
     --secondary: oklch(0.269 0 0);
     --secondary-foreground: oklch(0.985 0 0);
     --muted: oklch(0.269 0 0);
@@ -128,20 +150,31 @@
     --destructive: oklch(0.704 0.191 22.216);
     --border: oklch(1 0 0 / 10%);
     --input: oklch(1 0 0 / 15%);
-    --ring: oklch(0.556 0 0);
-    --chart-1: oklch(0.87 0 0);
-    --chart-2: oklch(0.556 0 0);
+    --ring: oklch(0.55 0.14 15);
+    --chart-1: oklch(0.55 0.14 15);
+    --chart-2: oklch(0.55 0.12 252);
     --chart-3: oklch(0.439 0 0);
     --chart-4: oklch(0.371 0 0);
     --chart-5: oklch(0.269 0 0);
     --sidebar: oklch(0.205 0 0);
     --sidebar-foreground: oklch(0.985 0 0);
-    --sidebar-primary: oklch(0.488 0.243 264.376);
+    --sidebar-primary: oklch(0.55 0.14 15);
     --sidebar-primary-foreground: oklch(0.985 0 0);
     --sidebar-accent: oklch(0.269 0 0);
     --sidebar-accent-foreground: oklch(0.985 0 0);
     --sidebar-border: oklch(1 0 0 / 10%);
-    --sidebar-ring: oklch(0.556 0 0);
+    --sidebar-ring: oklch(0.55 0.14 15);
+    --brand-maroon: oklch(0.55 0.14 15);
+    --brand-maroon-foreground: oklch(0.99 0 0);
+    --brand-gold: var(--brand-maroon);
+    --brand-gold-foreground: var(--brand-maroon-foreground);
+    --brand-beige: oklch(0.3 0.02 75);
+    --brand-navy: oklch(0.55 0.12 252);
+    --footer: oklch(0.28 0.1 15);
+    --footer-foreground: oklch(0.99 0 0);
+    --footer-muted: oklch(0.85 0.03 75);
+    --footer-accent: oklch(0.55 0.12 252);
+    --footer-link-hover: oklch(1 0 0);
 }
 
 @layer base {

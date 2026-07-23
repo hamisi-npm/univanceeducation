@@ -42,7 +42,7 @@ export function FeaturedDestinations({
   return (
     <section
       aria-labelledby="featured-destinations-heading"
-      className={cn(sectionStyles.sectionNavy, sectionStyles.padding, className)}
+      className={cn(sectionStyles.sectionBeige, sectionStyles.padding, className)}
     >
       <Container>
         <div className={sectionStyles.stack}>
@@ -51,12 +51,12 @@ export function FeaturedDestinations({
               <span className={sectionStyles.badgeGold}>{section.badge}</span>
               <h2
                 id="featured-destinations-heading"
-                className={sectionStyles.headingOnDark}
+                className={sectionStyles.heading}
               >
                 {section.heading}
               </h2>
               {section.description ? (
-                <p className={sectionStyles.descriptionOnDark}>
+                <p className={sectionStyles.description}>
                   {section.description}
                 </p>
               ) : null}
@@ -65,11 +65,7 @@ export function FeaturedDestinations({
             {showViewAll ? (
               <Button
                 asChild
-                className={cn(
-                  "shrink-0",
-                  buttonStyles.responsiveOutline,
-                  buttonStyles.outlineOnDark,
-                )}
+                className={cn("shrink-0", buttonStyles.responsiveOutline)}
               >
                 <Link href={section.viewAllHref}>
                   {section.viewAllLabel}
@@ -102,7 +98,7 @@ export function FeaturedDestinations({
                   aria-label="Scroll destinations left"
                   onClick={() => scrollByAmount("prev")}
                   className={cn(
-                    "absolute -left-2 top-1/2 z-10 hidden size-11 -translate-y-1/2 rounded-full bg-brand-gold text-brand-gold-foreground shadow-lg hover:bg-brand-gold/90 sm:inline-flex",
+                    "absolute -left-2 top-1/2 z-10 hidden size-11 -translate-y-1/2 rounded-full bg-primary text-primary-foreground shadow-lg hover:bg-primary/90 sm:inline-flex",
                     focusRing,
                   )}
                 >
@@ -114,7 +110,7 @@ export function FeaturedDestinations({
                   aria-label="Scroll destinations right"
                   onClick={() => scrollByAmount("next")}
                   className={cn(
-                    "absolute -right-2 top-1/2 z-10 hidden size-11 -translate-y-1/2 rounded-full bg-brand-gold text-brand-gold-foreground shadow-lg hover:bg-brand-gold/90 sm:inline-flex",
+                    "absolute -right-2 top-1/2 z-10 hidden size-11 -translate-y-1/2 rounded-full bg-primary text-primary-foreground shadow-lg hover:bg-primary/90 sm:inline-flex",
                     focusRing,
                   )}
                 >
@@ -164,7 +160,7 @@ function DestinationCarouselCard({ destination }: { destination: Destination }) 
             {destination.flag}
           </span>
           <div className="min-w-0">
-            <h3 className="truncate text-base font-semibold text-brand-navy">
+            <h3 className="truncate text-base font-semibold text-foreground">
               {destination.country}
             </h3>
             <p className="truncate text-xs text-muted-foreground">

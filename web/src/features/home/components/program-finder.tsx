@@ -108,39 +108,44 @@ export function ProgramFinder({ content, className }: ProgramFinderProps) {
   }>;
 
   const themeClass =
-    content.backgroundTheme === "beige"
-      ? "bg-brand-beige text-brand-navy ring-brand-navy/10"
-      : content.backgroundTheme === "navy"
-        ? "bg-brand-navy text-white ring-white/10"
-        : "bg-brand-navy text-white ring-white/10";
+    content.backgroundTheme === "navy"
+      ? "bg-primary text-white ring-white/10"
+      : "bg-brand-beige text-foreground ring-border/60";
 
-  const labelClass =
-    content.backgroundTheme === "beige" ? "text-brand-navy/70" : "text-white/70";
+  const isDark = content.backgroundTheme === "navy";
 
-  const selectClass =
-    content.backgroundTheme === "beige"
-      ? "border-brand-navy/15 bg-white text-brand-navy hover:border-brand-navy/30 focus:border-brand-gold focus:ring-brand-gold/50"
-      : "border-white/15 bg-white/5 text-white hover:border-white/25 focus:border-brand-gold focus:ring-brand-gold/50";
+  const labelClass = isDark ? "text-white/70" : "text-muted-foreground";
+
+  const selectClass = isDark
+    ? "border-white/15 bg-white/5 text-white hover:border-white/25 focus:border-brand-beige focus:ring-brand-beige/40"
+    : "border-border bg-white text-foreground hover:border-primary/30 focus:border-primary focus:ring-primary/40";
 
   return (
     <form
       onSubmit={handleSubmit}
       aria-label={content.heading}
       className={cn(
-        "flex flex-col gap-4 rounded-2xl p-4 shadow-xl shadow-black/20 ring-1 sm:p-5 lg:flex-row lg:items-end lg:gap-5",
+        "flex flex-col gap-4 rounded-2xl p-4 shadow-xl shadow-black/10 ring-1 sm:p-5 lg:flex-row lg:items-end lg:gap-5",
         themeClass,
         className,
       )}
     >
       <div className="flex min-w-0 items-center gap-3 lg:max-w-xs lg:shrink-0">
-        <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-brand-gold text-brand-gold-foreground">
+        <div
+          className={cn(
+            "flex size-11 shrink-0 items-center justify-center rounded-xl",
+            isDark
+              ? "bg-brand-navy text-white"
+              : "bg-brand-navy/10 text-brand-navy",
+          )}
+        >
           <GraduationCap className="size-5" aria-hidden="true" />
         </div>
         <div className="min-w-0 space-y-0.5">
           <p
             className={cn(
               "text-sm font-semibold leading-snug sm:text-base",
-              content.backgroundTheme === "beige" ? "text-brand-navy" : "text-white",
+              isDark ? "text-white" : "text-foreground",
             )}
           >
             {content.heading}
