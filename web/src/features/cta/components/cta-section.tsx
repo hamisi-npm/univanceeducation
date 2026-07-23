@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 type CtaSectionProps = {
   content: CtaSectionContent;
   className?: string;
-  /** `banner` = horizontal navy bar (homepage mid CTA). `default` = centered block. */
+  /** `banner` = horizontal blue bar (homepage mid CTA). `default` = centered block. */
   variant?: "default" | "banner";
   headingId?: string;
 };
@@ -29,7 +29,7 @@ export function CtaSection({
     return (
       <section
         aria-labelledby={headingId}
-        className={cn(sectionStyles.sectionNavy, "py-10 sm:py-12", className)}
+        className={cn(sectionStyles.sectionBlue, "py-10 sm:py-12", className)}
       >
         <Container>
           <div className="flex flex-col items-start gap-6 lg:flex-row lg:items-center lg:justify-between lg:gap-10">

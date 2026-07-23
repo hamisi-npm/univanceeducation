@@ -26,9 +26,11 @@ export const sectionStyles = {
   sectionMuted: "bg-brand-beige",
   sectionBackground: "bg-background",
   sectionBeige: "bg-brand-beige",
-  /** Dark brand band — deep maroon (CTAs / footer-like surfaces). */
+  /** Dark brand band — deep maroon (footer-like surfaces). */
   sectionNavy: "bg-primary text-white",
   sectionMaroon: "bg-primary text-white",
+  /** Supporting dark band — royal blue (e.g. homepage CTA banner). */
+  sectionBlue: "bg-brand-navy text-white",
 } as const;
 
 export const cardStyles = {
