@@ -14,7 +14,12 @@ export function HeroContent({ content, className }: HeroContentProps) {
 
   return (
     <div className={cn("space-y-5", className)}>
-      <p className={cn(sectionStyles.badgeGold, "tracking-[0.18em]")}>
+      <p
+        className={cn(
+          sectionStyles.badgeGold,
+          "tracking-[0.18em] text-white",
+        )}
+      >
         {badge.text}
         {badge.suffix ? (
           <>
