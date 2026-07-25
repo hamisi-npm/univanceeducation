@@ -18,15 +18,14 @@ import {
 const webhookPayloadSchema = z.object({
   _type: z.string().trim().min(1).max(128),
   _id: z.string().max(256).optional(),
-  kind: z.string().trim().max(64).optional(),
+  kind: z.string().trim().max(64).nullish(),
   slug: z
     .union([
       z.string().max(256),
       z.object({ current: z.string().max(256).optional() }),
     ])
-    .optional(),
+    .nullish(),
 });
-
 type WebhookPayload = z.infer<typeof webhookPayloadSchema>;
 
 const isDevelopment = process.env.NODE_ENV === "development";
@@ -174,7 +173,7 @@ export async function POST(request: NextRequest) {
       _type,
       _id,
       kind: kind === "privacy" || kind === "terms" ? kind : undefined,
-      slug,
+      slug: slug ?? undefined,
     });
 
     for (const tag of tags) {
