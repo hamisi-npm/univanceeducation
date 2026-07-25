@@ -28,6 +28,10 @@ export const sanityTags = {
   faqs: "sanity:faqs",
   legalPrivacy: "sanity:legal-privacy",
   legalTerms: "sanity:legal-terms",
+  cookiePolicy: "sanity:cookie-policy",
+  newsletterPages: "sanity:newsletter-pages",
+  emailTemplates: "sanity:email-templates",
+  systemMessages: "sanity:system-messages",
   global: "sanity:global",
 } as const;
 

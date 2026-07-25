@@ -1,1 +1,1 @@
-export { ProcessSection } from "@/features/process/components/process-section";
+export { ProcessSteps } from "@/features/process/components/process-steps";

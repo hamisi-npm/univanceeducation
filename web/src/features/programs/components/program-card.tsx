@@ -31,7 +31,7 @@ export function ProgramCard({
       )}
     >
       <div className="relative aspect-[16/10] overflow-hidden bg-muted">
-        {program.image.src ? (
+        {program.image?.src ? (
           <Image
             src={program.image.src}
             alt={program.image.alt}

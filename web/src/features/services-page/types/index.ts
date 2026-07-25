@@ -14,7 +14,7 @@ export type ServicesHeroContent = {
   heading: string;
   description: string;
   cta: ServicesCtaLink;
-  image: ServicesImage;
+  image: ServicesImage | null;
 };
 
 export type SectionHeaderContent = {

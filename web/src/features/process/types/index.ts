@@ -13,14 +13,3 @@ export type ProcessStep = {
   description: string;
   icon: ProcessStepIconName;
 };
-
-export type ProcessSectionContent = {
-  badge: string;
-  heading: string;
-  description: string;
-  cta: {
-    label: string;
-    href: string;
-    supportingText: string;
-  };
-};

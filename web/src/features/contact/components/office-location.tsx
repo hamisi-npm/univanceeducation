@@ -48,14 +48,16 @@ export function OfficeLocation({ content, className }: OfficeLocationProps) {
           </div>
 
           <div className="relative aspect-[16/10] overflow-hidden rounded-lg border border-border/80 bg-muted shadow-sm ring-1 ring-border/40">
-            <Image
-              src={content.mapImage.src}
-              alt={content.mapImage.alt}
-              fill
-              quality={80}
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover object-center"
-            />
+            {content.mapImage?.src ? (
+              <Image
+                src={content.mapImage.src}
+                alt={content.mapImage.alt}
+                fill
+                quality={80}
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover object-center"
+              />
+            ) : null}
           </div>
         </div>
       </Container>

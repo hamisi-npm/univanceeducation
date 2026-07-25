@@ -42,22 +42,24 @@ export function DestinationCard({
             isFeatured ? "aspect-[16/9] lg:aspect-[21/9]" : "aspect-[4/3]",
           )}
         >
-          <Image
-            src={destination.image.src}
-            alt={destination.image.alt}
-            fill
-            quality={80}
-            sizes={
-              isFeatured
-                ? "(max-width: 1024px) 100vw, 50vw"
-                : "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-            }
-            className={cn(
-              "object-cover object-center",
-              "motion-safe:transition-transform motion-safe:duration-500 motion-safe:ease-out",
-              "motion-safe:group-hover:scale-[1.03] motion-safe:group-focus-within:scale-[1.03]",
-            )}
-          />
+          {destination.image?.src ? (
+            <Image
+              src={destination.image.src}
+              alt={destination.image.alt}
+              fill
+              quality={80}
+              sizes={
+                isFeatured
+                  ? "(max-width: 1024px) 100vw, 50vw"
+                  : "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+              }
+              className={cn(
+                "object-cover object-center",
+                "motion-safe:transition-transform motion-safe:duration-500 motion-safe:ease-out",
+                "motion-safe:group-hover:scale-[1.03] motion-safe:group-focus-within:scale-[1.03]",
+              )}
+            />
+          ) : null}
           <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />
           <div className="absolute bottom-3 left-3 flex items-center gap-2 rounded-md border border-white/25 bg-background/95 px-2.5 py-1.5 shadow-sm backdrop-blur-sm">
             <span className="text-base leading-none" aria-hidden="true">

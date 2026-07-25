@@ -20,6 +20,7 @@ export const marketingRoutes: MarketingRoute[] = [
   { path: "/contact", changeFrequency: "monthly", priority: 0.9 },
   { path: "/privacy-policy", changeFrequency: "yearly", priority: 0.3 },
   { path: "/terms", changeFrequency: "yearly", priority: 0.3 },
+  { path: "/cookie-policy", changeFrequency: "yearly", priority: 0.3 },
 ];
 
 export type BreadcrumbItem = {
@@ -137,6 +138,31 @@ export const pageSeo: Record<string, PageSeoEntry> = {
     breadcrumbs: [
       { name: "Home", path: "/" },
       { name: "Terms", path: "/terms" },
+    ],
+  },
+  "/cookie-policy": {
+    title: "Cookie Policy",
+    description:
+      "How Univance Education uses cookies and similar technologies on our website.",
+    breadcrumbs: [
+      { name: "Home", path: "/" },
+      { name: "Cookie Policy", path: "/cookie-policy" },
+    ],
+  },
+  "/newsletter/confirm": {
+    title: "Newsletter confirmation",
+    description: "Confirm your Univance Education newsletter subscription.",
+    breadcrumbs: [
+      { name: "Home", path: "/" },
+      { name: "Newsletter", path: "/newsletter/confirm" },
+    ],
+  },
+  "/newsletter/unsubscribe": {
+    title: "Newsletter unsubscribe",
+    description: "Manage your Univance Education newsletter subscription.",
+    breadcrumbs: [
+      { name: "Home", path: "/" },
+      { name: "Unsubscribe", path: "/newsletter/unsubscribe" },
     ],
   },
 };

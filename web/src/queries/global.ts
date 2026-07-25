@@ -63,6 +63,12 @@ export const siteSettingsQuery = defineQuery(`*[_type == "siteSettings" && _id =
     address,
     mapsHref
   },
+  whatsappNumber,
+  whatsappMessage,
+  whatsappLabel,
+  seoDefaults {
+    ogImage ${imageWithAltProjection}
+  },
   social[]{
     icon,
     label,

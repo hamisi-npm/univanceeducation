@@ -4,6 +4,7 @@ import {collectionTypes} from './collections'
 import {pageDocumentTypes} from './pages'
 import {sharedDocumentObjectTypes} from './shared'
 import {siteDocumentTypes, siteObjectTypes} from './site'
+import {systemDocumentTypes} from './system'
 
 export {
   collectionTypes,
@@ -11,10 +12,12 @@ export {
   sharedDocumentObjectTypes,
   siteDocumentTypes,
   siteObjectTypes,
+  systemDocumentTypes,
 }
 
 export const documentTypes: SchemaTypeDefinition[] = [
   ...siteDocumentTypes,
   ...pageDocumentTypes,
+  ...systemDocumentTypes,
   ...collectionTypes,
 ]

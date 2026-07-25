@@ -54,6 +54,12 @@ export type SanitySiteSettings = {
     address: string;
     mapsHref?: string;
   };
+  whatsappNumber?: string | null;
+  whatsappMessage?: string | null;
+  whatsappLabel?: string | null;
+  seoDefaults?: {
+    ogImage?: SanityImageWithAlt | null;
+  } | null;
   social?: SanitySocialLink[] | null;
   keywords?: string[] | null;
 };

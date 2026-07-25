@@ -137,18 +137,20 @@ function DestinationCarouselCard({ destination }: { destination: Destination }) 
     >
       <Link href={href} className={cn("flex h-full flex-col", cardStyles.linkFocus)}>
         <div className="relative aspect-[3/4] overflow-hidden bg-brand-beige">
-          <Image
-            src={destination.image.src}
-            alt={destination.image.alt}
-            fill
-            quality={80}
-            sizes="(max-width: 640px) 80vw, 280px"
-            className={cn(
-              "object-cover object-center",
-              "motion-safe:transition-transform motion-safe:duration-500 motion-safe:ease-out",
-              "motion-safe:group-hover:scale-[1.04] motion-safe:group-focus-within:scale-[1.04]",
-            )}
-          />
+          {destination.image?.src ? (
+            <Image
+              src={destination.image.src}
+              alt={destination.image.alt}
+              fill
+              quality={80}
+              sizes="(max-width: 640px) 80vw, 280px"
+              className={cn(
+                "object-cover object-center",
+                "motion-safe:transition-transform motion-safe:duration-500 motion-safe:ease-out",
+                "motion-safe:group-hover:scale-[1.04] motion-safe:group-focus-within:scale-[1.04]",
+              )}
+            />
+          ) : null}
           <div
             className="absolute inset-0 bg-gradient-to-t from-brand-navy/50 via-transparent to-transparent"
             aria-hidden="true"

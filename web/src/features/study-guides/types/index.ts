@@ -19,7 +19,7 @@ export type StudyGuide = {
   categoryLabel: string;
   readTime: string;
   description: string;
-  coverImage: GuideCoverImage;
+  coverImage: GuideCoverImage | null;
   ctaLabel: string;
 };
 
@@ -56,7 +56,7 @@ export type SectionHeaderContent = {
 
 export type StudyGuidesHeroContent = SectionHeaderContent & {
   cta: CtaLink;
-  image: GuideCoverImage;
+  image: GuideCoverImage | null;
 };
 
 export type StudyGuidesCtaContent = {

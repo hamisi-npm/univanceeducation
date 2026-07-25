@@ -28,17 +28,19 @@ export function Hero({ content, trustStats, programFinder, site }: HeroProps) {
     <section aria-labelledby="hero-heading" className="relative bg-brand-beige">
       <div className="relative -mt-16 min-h-[78vh] overflow-hidden bg-foreground pt-16 sm:min-h-[82vh]">
         <div className="absolute inset-0">
-          <Image
-            src={content.image.src}
-            alt={content.image.alt}
-            fill
-            priority
-            quality={85}
-            placeholder="blur"
-            blurDataURL={HERO_IMAGE_BLUR}
-            sizes="100vw"
-            className="object-cover object-center"
-          />
+          {content.image?.src ? (
+            <Image
+              src={content.image.src}
+              alt={content.image.alt}
+              fill
+              priority
+              quality={85}
+              placeholder="blur"
+              blurDataURL={HERO_IMAGE_BLUR}
+              sizes="100vw"
+              className="object-cover object-center"
+            />
+          ) : null}
           <div
             className="absolute inset-0 bg-gradient-to-r from-foreground/90 via-foreground/65 to-foreground/25"
             aria-hidden="true"

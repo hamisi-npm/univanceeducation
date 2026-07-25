@@ -45,14 +45,16 @@ export function CompanyStory({ content, className }: CompanyStoryProps) {
 
           <div className="relative">
             <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-border/80 bg-muted shadow-sm ring-1 ring-border/40">
-              <Image
-                src={content.image.src}
-                alt={content.image.alt}
-                fill
-                quality={80}
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover object-center"
-              />
+              {content.image?.src ? (
+                <Image
+                  src={content.image.src}
+                  alt={content.image.alt}
+                  fill
+                  quality={80}
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover object-center"
+                />
+              ) : null}
             </div>
           </div>
         </div>

@@ -102,7 +102,7 @@ export function articleJsonLd(article: BlogArticle, site: SiteConfig): JsonLd {
       "@type": "Person",
       name: article.author,
     },
-    image: [article.coverImage.src],
+    image: article.coverImage?.src ? [article.coverImage.src] : undefined,
     mainEntityOfPage: {
       "@type": "WebPage",
       "@id": getAbsoluteUrl(`/blog/${article.slug}`, site.url),
@@ -160,7 +160,7 @@ export function courseJsonLd(program: ProgramDetail, site: SiteConfig): JsonLd {
     name: program.title,
     description: program.shortDescription,
     url: getAbsoluteUrl(`/programs/${program.slug}`, site.url),
-    image: program.image.src || undefined,
+    image: program.image?.src || undefined,
     provider,
     educationalLevel: program.studyLevelName || undefined,
     timeRequired: program.duration || undefined,

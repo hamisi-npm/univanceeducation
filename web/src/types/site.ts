@@ -8,11 +8,18 @@ export type SiteLogo = {
   height: number;
 };
 
+export type SiteWhatsApp = {
+  number: string;
+  message: string;
+  label: string;
+};
+
 export type SiteConfig = {
   name: string;
   tagline: string;
   description: string;
   url: string;
+  /** Absolute Sanity CDN URL for default Open Graph image; empty when unset. */
   ogImage: string;
   logo: SiteLogo;
   /** Absolute URL for browser/tab icons — favicon asset or logo fallback. */
@@ -26,6 +33,7 @@ export type SiteConfig = {
     address: string;
     mapsHref?: string;
   };
+  whatsapp: SiteWhatsApp;
   social: {
     twitter: string;
     linkedin: string;

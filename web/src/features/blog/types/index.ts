@@ -19,7 +19,7 @@ export type BlogArticle = {
   author: string;
   date: string;
   readTime: string;
-  coverImage: BlogCoverImage;
+  coverImage: BlogCoverImage | null;
   summary: string;
   featured?: boolean;
 };
@@ -43,7 +43,7 @@ export type SectionHeaderContent = {
 
 export type BlogHeroContent = SectionHeaderContent & {
   cta: CtaLink;
-  image: BlogCoverImage;
+  image: BlogCoverImage | null;
 };
 
 export type FeaturedPostContent = SectionHeaderContent;

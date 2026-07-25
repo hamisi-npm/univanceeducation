@@ -28,10 +28,7 @@ export function formatOfficeAddressInline(office: PrimaryOffice): string {
   return formatOfficeAddress(office).replace(/\n/g, ", ");
 }
 
-/**
- * Builds a Google Maps search URL from the formatted address.
- * TODO: Replace with a pinned Google Maps place URL when the final link is supplied.
- */
+/** Builds a Google Maps search URL from the formatted address. */
 export function buildMapsSearchHref(office: PrimaryOffice): string {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(formatOfficeAddressInline(office))}`;
 }

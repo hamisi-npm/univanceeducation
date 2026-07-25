@@ -21,19 +21,14 @@ function mapCta(cta: SanityProgramsPageDocument["ctaBanner"]["cta"]) {
 export function mapProgramsPage(
   document: SanityProgramsPageDocument,
 ): ProgramsPageData {
-  const heroImage = document.hero?.image
-    ? resolveSanityImage(document.hero.image, {
-        src: "",
-        alt: document.hero.heading || "",
-      })
-    : null;
+  const heroImage = resolveSanityImage(document.hero?.image);
 
   return {
     hero: {
       badge: document.hero?.badge || "",
       heading: document.hero?.heading || "",
       description: document.hero?.description || "",
-      image: heroImage?.src ? heroImage : null,
+      image: heroImage,
     },
     statistics:
       document.statistics

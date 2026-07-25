@@ -4,9 +4,7 @@ import { motion, useReducedMotion } from "framer-motion";
 
 import { focusRing } from "@/lib/section-styles";
 import { cn } from "@/lib/utils";
-
-const TOOLTIP_LABEL = "Chat with an Advisor";
-const DEFAULT_MESSAGE = "Hello, I would like to learn more about studying abroad.";
+import type { SiteWhatsApp } from "@/types/site";
 
 const positionClasses = cn(
   "group fixed z-50",
@@ -14,9 +12,9 @@ const positionClasses = cn(
   "right-[max(1.5rem,env(safe-area-inset-right))]",
 );
 
-function buildWhatsAppHref(phone: string): string {
-  const digits = phone.replace(/\D/g, "");
-  const text = encodeURIComponent(DEFAULT_MESSAGE);
+function buildWhatsAppHref(number: string, message: string): string {
+  const digits = number.replace(/\D/g, "");
+  const text = encodeURIComponent(message);
   return `https://wa.me/${digits}?text=${text}`;
 }
 
@@ -35,10 +33,11 @@ function WhatsAppIcon({ className }: { className?: string }) {
 
 type FloatButtonProps = {
   href: string;
+  label: string;
   prefersReducedMotion: boolean | null;
 };
 
-function FloatButton({ href, prefersReducedMotion }: FloatButtonProps) {
+function FloatButton({ href, label, prefersReducedMotion }: FloatButtonProps) {
   return (
     <>
       <span
@@ -51,14 +50,14 @@ function FloatButton({ href, prefersReducedMotion }: FloatButtonProps) {
           "md:block md:group-hover:opacity-100 md:group-focus-within:opacity-100",
         )}
       >
-        {TOOLTIP_LABEL}
+        {label}
       </span>
 
       <motion.a
         href={href}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label={TOOLTIP_LABEL}
+        aria-label={label}
         className={cn(
           "flex size-14 items-center justify-center rounded-full bg-whatsapp text-whatsapp-foreground",
           "shadow-md ring-1 ring-black/5",
@@ -81,17 +80,24 @@ function FloatButton({ href, prefersReducedMotion }: FloatButtonProps) {
 }
 
 type WhatsAppFloatProps = {
-  phone: string;
+  whatsapp: SiteWhatsApp;
 };
 
-export function WhatsAppFloat({ phone }: WhatsAppFloatProps) {
+export function WhatsAppFloat({ whatsapp }: WhatsAppFloatProps) {
   const prefersReducedMotion = useReducedMotion();
-  const href = buildWhatsAppHref(phone);
+  const digits = whatsapp.number.replace(/\D/g, "");
+
+  if (!digits) {
+    return null;
+  }
+
+  const href = buildWhatsAppHref(whatsapp.number, whatsapp.message);
+  const label = whatsapp.label;
 
   if (prefersReducedMotion) {
     return (
       <div className={positionClasses}>
-        <FloatButton href={href} prefersReducedMotion />
+        <FloatButton href={href} label={label} prefersReducedMotion />
       </div>
     );
   }
@@ -112,7 +118,11 @@ export function WhatsAppFloat({ phone }: WhatsAppFloatProps) {
           delay: 0.5,
         }}
       >
-        <FloatButton href={href} prefersReducedMotion={prefersReducedMotion} />
+        <FloatButton
+          href={href}
+          label={label}
+          prefersReducedMotion={prefersReducedMotion}
+        />
       </motion.div>
     </motion.div>
   );

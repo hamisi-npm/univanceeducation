@@ -42,13 +42,13 @@ export function mapAboutPage(
       description: heroHeader?.description || "",
       primaryCta: mapCtaLink(document.hero?.primaryCta),
       secondaryCta: mapCtaLink(document.hero?.secondaryCta),
-      image: resolveSanityImage(document.hero?.image, { src: "", alt: "" }),
+      image: resolveSanityImage(document.hero?.image),
     },
     companyStory: {
       badge: document.companyStory?.badge || "",
       heading: document.companyStory?.heading || "",
       paragraphs: storyParagraphs,
-      image: resolveSanityImage(document.companyStory?.image, { src: "", alt: "" }),
+      image: resolveSanityImage(document.companyStory?.image),
     },
     missionVision: {
       ...mapSectionHeader(document.missionVision?.header),
@@ -77,10 +77,7 @@ export function mapAboutPage(
           name: member.name || "",
           position: member.position || "",
           bio: member.bio || "",
-          image: resolveSanityImage(member.image, {
-            src: "",
-            alt: member.name || "",
-          }),
+          image: resolveSanityImage(member.image),
         })) ?? [],
     },
     cta: mapCtaBanner(document.cta),

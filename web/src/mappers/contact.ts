@@ -57,7 +57,7 @@ export function mapContactPage(
       heading: heroHeader?.heading || "",
       description: heroHeader?.description || "",
       cta: mapCtaLink(document.hero?.cta),
-      image: resolveSanityImage(document.hero?.image, { src: "", alt: "" }),
+      image: resolveSanityImage(document.hero?.image),
     },
     contactMethods: {
       ...mapSectionHeader(document.contactMethods?.header),
@@ -97,10 +97,7 @@ export function mapContactPage(
     officeLocation: {
       ...mapSectionHeader(document.officeLocation?.header),
       address: document.officeLocation?.address || "",
-      mapImage: resolveSanityImage(document.officeLocation?.mapImage, {
-        src: "",
-        alt: "",
-      }),
+      mapImage: resolveSanityImage(document.officeLocation?.mapImage),
       openInMapsLabel: document.officeLocation?.openInMapsLabel || "",
       mapsHref: document.officeLocation?.mapsHref || "",
     },

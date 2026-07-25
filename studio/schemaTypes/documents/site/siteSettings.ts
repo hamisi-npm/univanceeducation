@@ -105,6 +105,33 @@ export const siteSettings = defineType({
       validation: (rule) => rule.required().error("Contact details are required"),
     }),
     defineField({
+      name: "whatsappNumber",
+      title: "WhatsApp number",
+      type: "string",
+      group: "contact",
+      description:
+        "International phone number for the floating WhatsApp button (digits with country code). Falls back to the contact phone when empty.",
+      validation: (rule) => rule.max(32),
+    }),
+    defineField({
+      name: "whatsappMessage",
+      title: "WhatsApp prefilled message",
+      type: "text",
+      rows: 3,
+      group: "contact",
+      description: "Optional message prefilled when a visitor opens the WhatsApp chat.",
+      validation: (rule) => rule.max(500),
+    }),
+    defineField({
+      name: "whatsappLabel",
+      title: "WhatsApp button label",
+      type: "string",
+      group: "contact",
+      description:
+        "Accessible label and tooltip for the floating WhatsApp button (e.g. Chat with an Advisor).",
+      validation: (rule) => rule.max(limits.shortLabel),
+    }),
+    defineField({
       name: "social",
       title: "Social profiles",
       type: "array",

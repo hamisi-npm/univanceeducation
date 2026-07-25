@@ -29,18 +29,20 @@ export function ArticleCard({ article, className }: ArticleCardProps) {
         className={cn("flex h-full flex-col", cardStyles.linkFocus)}
       >
         <div className="relative aspect-[16/10] overflow-hidden bg-muted">
-          <Image
-            src={article.coverImage.src}
-            alt={article.coverImage.alt}
-            fill
-            quality={80}
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className={cn(
-              "object-cover object-center",
-              "motion-safe:transition-transform motion-safe:duration-500 motion-safe:ease-out",
-              "motion-safe:group-hover:scale-[1.03] motion-safe:group-focus-within:scale-[1.03]",
-            )}
-          />
+          {article.coverImage?.src ? (
+            <Image
+              src={article.coverImage.src}
+              alt={article.coverImage.alt}
+              fill
+              quality={80}
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              className={cn(
+                "object-cover object-center",
+                "motion-safe:transition-transform motion-safe:duration-500 motion-safe:ease-out",
+                "motion-safe:group-hover:scale-[1.03] motion-safe:group-focus-within:scale-[1.03]",
+              )}
+            />
+          ) : null}
           <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />
           <div className="absolute bottom-3 left-3 rounded-md border border-white/25 bg-background/95 px-2.5 py-1.5 text-xs font-medium text-foreground shadow-sm backdrop-blur-sm">
             {article.categoryLabel}

@@ -118,7 +118,7 @@ export function mapServicesPage(
       heading: document.hero?.heading || "",
       description: document.hero?.description || "",
       cta: mapCtaLink(document.hero?.cta),
-      image: resolveSanityImage(document.hero?.image, { src: "", alt: "" }),
+      image: resolveSanityImage(document.hero?.image),
     },
     overview: mapSectionHeader(document.overview),
     serviceDetails: {

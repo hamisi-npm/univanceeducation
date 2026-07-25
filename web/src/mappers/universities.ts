@@ -100,7 +100,7 @@ export function mapUniversitiesPage(
         description: document.hero?.description,
       }),
       cta: mapCtaLink(document.hero?.cta),
-      image: resolveSanityImage(document.hero?.image, { src: "", alt: "" }),
+      image: resolveSanityImage(document.hero?.image),
     },
     featuredUniversities: mapSectionHeader(document.featuredUniversities?.header),
     browseByCountry: mapSectionHeader(document.browseByCountry),

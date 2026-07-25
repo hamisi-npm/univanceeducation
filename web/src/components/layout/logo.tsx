@@ -20,7 +20,7 @@ function getVariantConfig(site: SiteConfig, variant: LogoVariant) {
   switch (variant) {
     case "footer":
       return {
-        src: logo.srcLight,
+        src: logo.srcLight || logo.src,
         className: "h-9 w-auto",
         width: logo.width,
         height: logo.height,
@@ -49,7 +49,8 @@ export function Logo({
   priority = false,
 }: LogoProps) {
   const config = getVariantConfig(site, variant);
-  const isRemote = config.src.startsWith("http");
+  const src = config.src.trim();
+  const isRemote = src.startsWith("http");
 
   return (
     <Link
@@ -61,15 +62,17 @@ export function Logo({
         className,
       )}
     >
-      <Image
-        src={config.src}
-        alt={site.logo.alt}
-        width={config.width}
-        height={config.height}
-        unoptimized={!isRemote}
-        className={cn("object-contain object-left", config.className)}
-        priority={priority}
-      />
+      {src ? (
+        <Image
+          src={src}
+          alt={site.logo.alt}
+          width={config.width || 1}
+          height={config.height || 1}
+          unoptimized={!isRemote}
+          className={cn("object-contain object-left", config.className)}
+          priority={priority}
+        />
+      ) : null}
       <span className="sr-only">{site.name}</span>
     </Link>
   );

@@ -33,7 +33,7 @@ export type HeroContentData = {
   image: {
     src: string;
     alt: string;
-  };
+  } | null;
 };
 
 export type ProgramFinderOption = {

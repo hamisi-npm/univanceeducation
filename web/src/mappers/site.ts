@@ -6,6 +6,7 @@ import {
   formatOfficeAddress,
   type PrimaryOffice,
 } from "@/lib/format-office-address";
+import { resolveSanityImage } from "@/lib/sanity/utils/image";
 import { slugify } from "@/lib/slugify";
 import type {
   SanityCtaLink,
@@ -56,6 +57,10 @@ const EMPTY_BOTTOM_BAR: FooterContent["bottomBar"] = {
   legalLinks: [],
 };
 
+const DEFAULT_WHATSAPP_MESSAGE =
+  "Hello, I would like to learn more about studying abroad.";
+const DEFAULT_WHATSAPP_LABEL = "Chat with an Advisor";
+
 function mapPrimaryOffice(
   office: SanityPrimaryOffice | null | undefined,
 ): PrimaryOffice {
@@ -73,7 +78,8 @@ function mapPrimaryOffice(
 function mapImageWithAlt(
   image: SanityImageWithAlt | null | undefined,
 ): SiteConfig["logo"] {
-  const url = image?.asset?.url;
+  const resolved = resolveSanityImage(image);
+  const url = resolved?.src;
 
   if (!url) {
     return { ...EMPTY_LOGO };
@@ -82,9 +88,9 @@ function mapImageWithAlt(
   return {
     src: url,
     srcLight: url,
-    alt: image.alt || "",
-    width: image.asset?.metadata?.dimensions?.width ?? 0,
-    height: image.asset?.metadata?.dimensions?.height ?? 0,
+    alt: resolved.alt || image?.alt || "",
+    width: image?.asset?.metadata?.dimensions?.width ?? 0,
+    height: image?.asset?.metadata?.dimensions?.height ?? 0,
   };
 }
 
@@ -102,7 +108,11 @@ function mapSocialLinks(
   return social;
 }
 
-function mapCtaLink(link: SanityCtaLink): { label: string; href: string; external?: boolean } {
+function mapCtaLink(link: SanityCtaLink): {
+  label: string;
+  href: string;
+  external?: boolean;
+} {
   return {
     label: link.label || "",
     href: link.href || "",
@@ -110,24 +120,38 @@ function mapCtaLink(link: SanityCtaLink): { label: string; href: string; externa
   };
 }
 
+function mapWhatsApp(document: SanitySiteSettings): SiteConfig["whatsapp"] {
+  const number =
+    document.whatsappNumber?.trim() || document.contact?.phone?.trim() || "";
+  const message =
+    document.whatsappMessage?.trim() || DEFAULT_WHATSAPP_MESSAGE;
+  const label = document.whatsappLabel?.trim() || DEFAULT_WHATSAPP_LABEL;
+
+  return { number, message, label };
+}
+
 export function mapSiteSettings(document: SanitySiteSettings): SiteConfig {
   const primaryLogo = mapImageWithAlt(document.logo);
-  const lightLogo = document.logoLight ? mapImageWithAlt(document.logoLight) : null;
+  const lightLogo = document.logoLight
+    ? mapImageWithAlt(document.logoLight)
+    : null;
 
   const office = mapPrimaryOffice(document.primaryOffice);
   const address = formatOfficeAddress(office);
   const mapsHref =
     document.contact?.mapsHref?.trim() || buildMapsSearchHref(office);
 
+  const ogImage = resolveSanityImage(document.seoDefaults?.ogImage)?.src ?? "";
+
   return {
     name: document.name || "",
     tagline: document.tagline || "",
     description: document.description || "",
     url: process.env.NEXT_PUBLIC_SITE_URL ?? document.url ?? "",
-    ogImage: "",
+    ogImage,
     logo: {
       ...primaryLogo,
-      srcLight: lightLogo?.src ?? primaryLogo.srcLight,
+      srcLight: lightLogo?.src || primaryLogo.srcLight,
     },
     faviconUrl: document.faviconUrl?.trim() || primaryLogo.src || "",
     keywords: document.keywords?.length ? document.keywords : [],
@@ -139,6 +163,7 @@ export function mapSiteSettings(document: SanitySiteSettings): SiteConfig {
       address,
       mapsHref,
     },
+    whatsapp: mapWhatsApp(document),
     social: mapSocialLinks(document.social),
   };
 }
@@ -198,7 +223,9 @@ export function mapFooter(document: SanityFooter): FooterContent {
       ? {
           builtWithLabel: document.bottomBar.builtWithLabel || "",
           builtWithHref: document.bottomBar.builtWithHref || "",
-          legalLinks: document.bottomBar.legalLinks.map((link) => mapCtaLink(link)),
+          legalLinks: document.bottomBar.legalLinks.map((link) =>
+            mapCtaLink(link),
+          ),
         }
       : EMPTY_BOTTOM_BAR,
   };

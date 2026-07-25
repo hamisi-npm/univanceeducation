@@ -15,14 +15,14 @@ export type AboutHeroContent = {
   description: string;
   primaryCta: AboutCtaLink;
   secondaryCta: AboutCtaLink;
-  image: AboutImage;
+  image: AboutImage | null;
 };
 
 export type CompanyStoryContent = {
   badge: string;
   heading: string;
   paragraphs: string[];
-  image: AboutImage;
+  image: AboutImage | null;
 };
 
 export type MissionVisionCard = {
@@ -65,7 +65,7 @@ export type TeamMember = {
   name: string;
   position: string;
   bio: string;
-  image: AboutImage;
+  image: AboutImage | null;
 };
 
 export type TeamSectionContent = {

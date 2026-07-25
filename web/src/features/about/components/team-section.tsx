@@ -48,14 +48,16 @@ export function TeamSection({ content, className }: TeamSectionProps) {
                   )}
                 >
                   <div className="relative aspect-[4/3] bg-muted">
-                    <Image
-                      src={member.image.src}
-                      alt={member.image.alt}
-                      fill
-                      quality={80}
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                      className="object-cover object-center"
-                    />
+                    {member.image?.src ? (
+                      <Image
+                        src={member.image.src}
+                        alt={member.image.alt}
+                        fill
+                        quality={80}
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                        className="object-cover object-center"
+                      />
+                    ) : null}
                   </div>
                   <div className={cn(cardStyles.padding, "flex flex-1 flex-col gap-2")}>
                     <h3 className={cardStyles.title}>{member.name}</h3>

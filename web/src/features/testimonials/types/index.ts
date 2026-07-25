@@ -11,14 +11,8 @@ export type Testimonial = {
   course: string;
   rating: number;
   quote: string;
-  image: TestimonialImage;
+  image: TestimonialImage | null;
   featured: boolean;
-};
-
-export type TestimonialsSectionContent = {
-  badge: string;
-  heading: string;
-  description: string;
 };
 
 export type TestimonialCardVariant = "featured" | "standard";

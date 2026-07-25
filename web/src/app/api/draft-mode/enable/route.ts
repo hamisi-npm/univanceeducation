@@ -17,6 +17,32 @@ export async function GET(request: Request) {
   const draft = await draftMode();
   draft.enable();
 
-  const redirectTo = searchParams.get("sanity-preview-pathname") || "/";
+  const redirectTo = safePreviewPath(
+    searchParams.get("sanity-preview-pathname"),
+  );
   return NextResponse.redirect(new URL(redirectTo, request.url));
+}
+
+/**
+ * Presentation Tool may pass a pathname query param. Only same-origin
+ * relative paths are accepted — absolute URLs and protocol-relative
+ * targets are rejected to prevent open redirects.
+ */
+function safePreviewPath(value: string | null): string {
+  if (!value) {
+    return "/";
+  }
+
+  const trimmed = value.trim();
+
+  if (
+    !trimmed.startsWith("/") ||
+    trimmed.startsWith("//") ||
+    trimmed.includes("://") ||
+    trimmed.includes("\\")
+  ) {
+    return "/";
+  }
+
+  return trimmed;
 }

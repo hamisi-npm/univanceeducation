@@ -14,7 +14,7 @@ export type DestinationsHeroContent = {
   heading: string;
   description: string;
   cta: DestinationsCtaLink;
-  image: DestinationsImage;
+  image: DestinationsImage | null;
 };
 
 export type SectionHeaderContent = {

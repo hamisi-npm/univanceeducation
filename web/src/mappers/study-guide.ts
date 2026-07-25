@@ -44,10 +44,7 @@ export function mapStudyGuideCard(guide: SanityStudyGuideCard): StudyGuide {
     categoryLabel: guide.categoryLabel || "",
     readTime: guide.readTime || "",
     description: guide.description || "",
-    coverImage: resolveSanityImage(guide.coverImage, {
-      src: "",
-      alt: guide.title || "",
-    }),
+    coverImage: resolveSanityImage(guide.coverImage),
     ctaLabel: guide.ctaLabel || "",
   };
 }

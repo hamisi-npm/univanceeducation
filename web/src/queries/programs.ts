@@ -184,37 +184,6 @@ export const relatedProgramsQuery = defineQuery(`*[
   )
 ] | order(order asc, title asc) [0...$limit] ${programCardProjection}`);
 
-export const featuredProgramsQuery = defineQuery(`*[
-  _type == "program"
-  && featured == true
-] | order(order asc, title asc) [0...$limit] ${programCardProjection}`);
-
-export const courseCategoriesQuery = defineQuery(`*[_type == "courseCategory"] | order(order asc) {
-  name,
-  "slug": slug.current,
-  description,
-  icon,
-  featured
-}`);
-
-export const studyLevelsQuery = defineQuery(`*[_type == "studyLevel"] | order(order asc) {
-  name,
-  "slug": slug.current,
-  description,
-  icon
-}`);
-
-export const facultiesQuery = defineQuery(`*[_type == "faculty"] | order(order asc) {
-  name,
-  "slug": slug.current,
-  description
-}`);
-
-export const degreeTypesQuery = defineQuery(`*[_type == "degreeType"] | order(order asc) {
-  name,
-  "slug": slug.current
-}`);
-
 export const programFilterOptionsQuery = defineQuery(`{
   "destinations": *[_type == "destination"] | order(order asc) {
     "slug": slug.current,

@@ -52,15 +52,17 @@ export function StudyGuideDetailView({ guide }: StudyGuideDetailViewProps) {
             </div>
 
             <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-border/80 bg-muted shadow-sm ring-1 ring-border/40">
-              <Image
-                src={guide.coverImage.src}
-                alt={guide.coverImage.alt}
-                fill
-                priority
-                quality={85}
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover object-center"
-              />
+              {guide.coverImage?.src ? (
+                <Image
+                  src={guide.coverImage.src}
+                  alt={guide.coverImage.alt}
+                  fill
+                  priority
+                  quality={85}
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover object-center"
+                />
+              ) : null}
             </div>
           </div>
         </Container>

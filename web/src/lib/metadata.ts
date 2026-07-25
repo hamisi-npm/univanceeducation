@@ -53,8 +53,12 @@ export function createMetadata(
     typeof description === "string" ? description : site.description;
   const canonicalPath = path ?? "/";
   const canonicalUrl = getAbsoluteUrl(canonicalPath, site.url);
-  const ogImage = site.ogImage;
+  const ogImage = site.ogImage.trim();
   const officeLine = formatOfficeAddressInline(site.office);
+
+  const ogImages = ogImage
+    ? [{ url: ogImage, width: 1200, height: 630, alt: site.name }]
+    : undefined;
 
   const baseOpenGraph = {
     type: "website" as const,
@@ -63,14 +67,14 @@ export function createMetadata(
     title: titleString,
     description: resolvedDescription,
     url: canonicalUrl,
-    images: [{ url: ogImage, width: 1200, height: 630, alt: site.name }],
+    ...(ogImages ? { images: ogImages } : {}),
   };
 
   const baseTwitter = {
     card: "summary_large_image" as const,
     title: titleString,
     description: resolvedDescription,
-    images: [ogImage],
+    ...(ogImage ? { images: [ogImage] } : {}),
   };
 
   return {

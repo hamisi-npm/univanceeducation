@@ -51,7 +51,7 @@ const EMPTY_ARTICLE: BlogArticle = {
   author: "",
   date: "",
   readTime: "",
-  coverImage: { src: "", alt: "" },
+  coverImage: null,
   summary: "",
 };
 
@@ -73,10 +73,7 @@ export function mapBlogPostCard(post: SanityBlogPostCard): BlogArticle {
     author: post.author || "",
     date: normalizeDate(post.date),
     readTime: post.readTime || "",
-    coverImage: resolveSanityImage(post.coverImage, {
-      src: "",
-      alt: post.title || "",
-    }),
+    coverImage: resolveSanityImage(post.coverImage),
     summary: post.summary || "",
     featured: post.featured ?? false,
   };

@@ -45,5 +45,3 @@ export async function sanityFetch<T>({
     return null;
   }
 }
-
-export { SANITY_REVALIDATE_SECONDS };

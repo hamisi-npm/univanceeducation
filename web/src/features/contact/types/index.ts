@@ -14,7 +14,7 @@ export type ContactHeroContent = {
   heading: string;
   description: string;
   cta: ContactCtaLink;
-  image: ContactImage;
+  image: ContactImage | null;
 };
 
 export type SectionHeaderContent = {
@@ -64,7 +64,7 @@ export type ConsultationFormContent = SectionHeaderContent & {
 
 export type OfficeLocationContent = SectionHeaderContent & {
   address: string;
-  mapImage: ContactImage;
+  mapImage: ContactImage | null;
   openInMapsLabel: string;
   mapsHref: string;
 };

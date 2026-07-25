@@ -28,6 +28,8 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const isDraftMode = (await draftMode()).isEnabled;
+
   return (
     <html
       lang="en"
@@ -35,8 +37,12 @@ export default async function RootLayout({
     >
       <body className="flex min-h-full flex-col font-sans">
         {children}
-        <SanityLive />
-        {(await draftMode()).isEnabled && <VisualEditing />}
+        {isDraftMode && (
+          <>
+            <SanityLive />
+            <VisualEditing />
+          </>
+        )}
       </body>
     </html>
   );

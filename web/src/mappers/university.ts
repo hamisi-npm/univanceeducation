@@ -56,10 +56,7 @@ export function mapUniversityCard(university: SanityUniversityCard): University 
     description: university.description || "",
     programs: university.programs?.length ? university.programs : [],
     tuitionRange: university.tuitionRange || "",
-    image: resolveSanityImage(university.image, {
-      src: "",
-      alt: university.name || "",
-    }),
+    image: resolveSanityImage(university.image),
     featured: university.featured ?? false,
     ctaLabel: university.ctaLabel || "",
   };

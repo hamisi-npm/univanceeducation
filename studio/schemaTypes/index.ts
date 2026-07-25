@@ -6,13 +6,14 @@ import {
   sharedDocumentObjectTypes,
   siteDocumentTypes,
   siteObjectTypes,
+  systemDocumentTypes,
 } from './documents'
 import {objectTypes} from './objects'
 import {taxonomyTypes} from './taxonomy'
 
 /**
  * All Sanity schema types.
- * Order: shared objects → document objects → taxonomy → collections → site → pages.
+ * Order: shared objects → document objects → taxonomy → collections → site → pages → system.
  */
 export const schemaTypes: SchemaTypeDefinition[] = [
   ...objectTypes,
@@ -22,4 +23,5 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   ...collectionTypes,
   ...siteDocumentTypes,
   ...pageDocumentTypes,
+  ...systemDocumentTypes,
 ]

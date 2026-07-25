@@ -126,7 +126,7 @@ export function mapDestinationsPage(
       heading: document.hero?.heading || "",
       description: document.hero?.description || "",
       cta: mapCtaLink(document.hero?.cta),
-      image: resolveSanityImage(document.hero?.image, { src: "", alt: "" }),
+      image: resolveSanityImage(document.hero?.image),
     },
     featuredCountries: mapSectionHeader(document.featuredCountries?.header),
     countryGrid: mapSectionHeader(document.countryGrid?.header),

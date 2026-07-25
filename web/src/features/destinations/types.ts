@@ -11,7 +11,7 @@ export type Destination = {
   description: string;
   studyFields: string[];
   tuitionRange: string;
-  image: DestinationImage;
+  image: DestinationImage | null;
   featured: boolean;
   ctaLabel: string;
 };

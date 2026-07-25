@@ -1,8 +1,9 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Container } from "@/components/layout/container";
 import type { NewsletterContent } from "@/features/blog/types";
+import { NewsletterSubscribeForm } from "@/features/newsletter/components/newsletter-subscribe-form";
+import { NEWSLETTER_SOURCES } from "@/constants/operational";
 import { cardStyles, sectionStyles } from "@/lib/section-styles";
+import { getSystemMessages } from "@/services/system";
 import { cn } from "@/lib/utils";
 
 type NewsletterProps = {
@@ -10,7 +11,8 @@ type NewsletterProps = {
   className?: string;
 };
 
-export function Newsletter({ content, className }: NewsletterProps) {
+export async function Newsletter({ content, className }: NewsletterProps) {
+  const messages = await getSystemMessages();
 
   return (
     <section
@@ -46,32 +48,19 @@ export function Newsletter({ content, className }: NewsletterProps) {
               </p>
             </div>
 
-            <form className="mx-auto w-full max-w-md" noValidate>
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-                <div className="flex-1">
-                  <label htmlFor="blog-newsletter-email" className="sr-only">
-                    {content.emailLabel}
-                  </label>
-                  <Input
-                    id="blog-newsletter-email"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    placeholder={content.emailPlaceholder}
-                    className="h-10 bg-background sm:h-9"
-                  />
-                </div>
-                <Button
-                  type="button"
-                  className="h-10 w-full shrink-0 sm:h-9 sm:w-auto"
-                >
-                  {content.submitLabel}
-                </Button>
-              </div>
-              <p className="mt-3 text-pretty text-xs leading-relaxed text-muted-foreground">
-                {content.privacyNote}
-              </p>
-            </form>
+            <NewsletterSubscribeForm
+              source={NEWSLETTER_SOURCES.blog}
+              surface="default"
+              emailLabel={content.emailLabel}
+              emailPlaceholder={content.emailPlaceholder}
+              submitLabel={content.submitLabel}
+              emailInputId="blog-newsletter-email"
+              formClassName="mx-auto w-full max-w-md"
+              inputClassName="bg-background"
+              privacyNote={content.privacyNote}
+              successMessage={messages.newsletterSubscribeSuccess}
+              alreadySubscribedMessage={messages.newsletterAlreadySubscribed}
+            />
           </div>
         </div>
       </Container>

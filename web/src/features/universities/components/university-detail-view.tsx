@@ -66,15 +66,17 @@ export function UniversityDetailView({
             </div>
 
             <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-border/80 bg-muted shadow-sm ring-1 ring-border/40">
-              <Image
-                src={university.image.src}
-                alt={university.image.alt}
-                fill
-                priority
-                quality={85}
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover object-center"
-              />
+              {university.image?.src ? (
+                <Image
+                  src={university.image.src}
+                  alt={university.image.alt}
+                  fill
+                  priority
+                  quality={85}
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover object-center"
+                />
+              ) : null}
             </div>
           </div>
         </Container>

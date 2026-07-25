@@ -28,6 +28,13 @@ export const legalPageDocumentIds = {
   terms: "legalPage-terms",
 } as const;
 
+export {
+  cookiePolicyDocumentId,
+  emailTemplateDocumentIds,
+  newsletterPageDocumentIds,
+  systemMessagesDocumentId,
+} from "../documents/system/ids";
+
 export type SingletonDocumentType = keyof typeof singletonDocumentIds;
 
 /**

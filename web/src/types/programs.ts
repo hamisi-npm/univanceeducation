@@ -5,7 +5,7 @@ export type ProgramCard = {
   slug: string;
   title: string;
   featured: boolean;
-  image: { src: string; alt: string };
+  image: { src: string; alt: string } | null;
   shortDescription: string;
   duration: string;
   currency: string;
@@ -55,7 +55,7 @@ export type ProgramDetail = ProgramCard & {
     type: string;
     description: string;
     tuitionRange: string;
-    image: { src: string; alt: string };
+    image: { src: string; alt: string } | null;
     destinationCountry: string;
     destinationSlug: string;
     destinationFlag: string;

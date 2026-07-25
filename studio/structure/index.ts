@@ -5,6 +5,7 @@ import {CommentIcon} from '@sanity/icons/Comment'
 import {ComposeIcon} from '@sanity/icons/Compose'
 import {EarthAmericasIcon} from '@sanity/icons/EarthAmericas'
 import {EarthGlobeIcon} from '@sanity/icons/EarthGlobe'
+import {EnvelopeIcon} from '@sanity/icons/Envelope'
 import {HelpCircleIcon} from '@sanity/icons/HelpCircle'
 import {HomeIcon} from '@sanity/icons/Home'
 import {LockIcon} from '@sanity/icons/Lock'
@@ -14,10 +15,19 @@ import {StarIcon} from '@sanity/icons/Star'
 import {TagIcon} from '@sanity/icons/Tag'
 import {UsersIcon} from '@sanity/icons/Users'
 import {DocumentIcon} from '@sanity/icons/Document'
+import {InfoOutlineIcon} from '@sanity/icons/InfoOutline'
+import {BoltIcon} from '@sanity/icons/Bolt'
 import type {ComponentType} from 'react'
 import type {StructureBuilder, StructureResolver} from 'sanity/structure'
 
-import {legalPageDocumentIds, singletonDocumentIds} from '../schemaTypes/singletons'
+import {
+  cookiePolicyDocumentId,
+  emailTemplateDocumentIds,
+  legalPageDocumentIds,
+  newsletterPageDocumentIds,
+  singletonDocumentIds,
+  systemMessagesDocumentId,
+} from '../schemaTypes/singletons'
 
 type SingletonConfig = {
   title: string
@@ -216,6 +226,11 @@ export const structure: StructureResolver = (S) =>
             schemaType: 'legalPage',
             documentId: legalPageDocumentIds.terms,
           }),
+          singletonEditor(S, {
+            title: 'Cookie Policy',
+            schemaType: 'cookiePolicy',
+            documentId: cookiePolicyDocumentId,
+          }),
         ]),
       ]),
       S.divider(),
@@ -285,6 +300,69 @@ export const structure: StructureResolver = (S) =>
           title: 'Degree Types',
           schemaType: 'degreeType',
           defaultOrdering: [{field: 'order', direction: 'asc'}],
+        }),
+      ]),
+      S.divider(),
+      section(S, 'System', BoltIcon, [
+        section(S, 'Newsletter Pages', EnvelopeIcon, [
+          singletonEditor(S, {
+            title: 'Newsletter Confirmation',
+            schemaType: 'newsletterPage',
+            documentId: newsletterPageDocumentIds.confirmation,
+          }),
+          singletonEditor(S, {
+            title: 'Already Subscribed',
+            schemaType: 'newsletterPage',
+            documentId: newsletterPageDocumentIds['already-subscribed'],
+          }),
+          singletonEditor(S, {
+            title: 'Subscription Invalid',
+            schemaType: 'newsletterPage',
+            documentId: newsletterPageDocumentIds.invalid,
+          }),
+          singletonEditor(S, {
+            title: 'Subscription Expired',
+            schemaType: 'newsletterPage',
+            documentId: newsletterPageDocumentIds.expired,
+          }),
+          singletonEditor(S, {
+            title: 'Unsubscribed',
+            schemaType: 'newsletterPage',
+            documentId: newsletterPageDocumentIds.unsubscribed,
+          }),
+          singletonEditor(S, {
+            title: 'Already Unsubscribed',
+            schemaType: 'newsletterPage',
+            documentId: newsletterPageDocumentIds['already-unsubscribed'],
+          }),
+        ]),
+        section(S, 'Email Templates', ComposeIcon, [
+          singletonEditor(S, {
+            title: 'Consultation Confirmation',
+            schemaType: 'emailTemplate',
+            documentId: emailTemplateDocumentIds['consultation-confirmation'],
+          }),
+          singletonEditor(S, {
+            title: 'Consultation Staff Notification',
+            schemaType: 'emailTemplate',
+            documentId: emailTemplateDocumentIds['consultation-staff'],
+          }),
+          singletonEditor(S, {
+            title: 'Newsletter Confirmation',
+            schemaType: 'emailTemplate',
+            documentId: emailTemplateDocumentIds['newsletter-confirmation'],
+          }),
+          singletonEditor(S, {
+            title: 'Newsletter Unsubscribed',
+            schemaType: 'emailTemplate',
+            documentId: emailTemplateDocumentIds['newsletter-unsubscribed'],
+          }),
+        ]),
+        singletonEditor(S, {
+          title: 'System Messages',
+          schemaType: 'systemMessages',
+          documentId: systemMessagesDocumentId,
+          icon: InfoOutlineIcon,
         }),
       ]),
     ])

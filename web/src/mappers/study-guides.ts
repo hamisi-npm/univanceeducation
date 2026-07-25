@@ -58,7 +58,7 @@ export function mapStudyGuidesPage(
       heading: document.hero?.heading || "",
       description: document.hero?.description || "",
       cta: mapCtaLink(document.hero?.cta),
-      image: resolveSanityImage(document.hero?.image, { src: "", alt: "" }),
+      image: resolveSanityImage(document.hero?.image),
     },
     featuredGuides: mapSectionHeader(document.featuredGuides),
     guideCategories: {

@@ -86,7 +86,7 @@ function mapHero(
       },
       stats: trustStats,
       floatingCards: [],
-      image: { src: "", alt: "" },
+      image: null,
     };
   }
 
@@ -111,7 +111,7 @@ function mapHero(
     },
     stats: trustStats,
     floatingCards: [],
-    image: resolveSanityImage(hero.image, { src: "", alt: "" }),
+    image: resolveSanityImage(hero.image),
   };
 }
 
@@ -181,10 +181,7 @@ function mapDestination(destination: SanityHomepageDestination): Destination {
     description: destination.description || "",
     studyFields: destination.studyFields?.length ? destination.studyFields : [],
     tuitionRange: destination.tuitionRange || "",
-    image: resolveSanityImage(destination.image, {
-      src: "",
-      alt: destination.country || "",
-    }),
+    image: resolveSanityImage(destination.image),
     featured: destination.featured ?? false,
     ctaLabel: destination.ctaLabel || "",
   };

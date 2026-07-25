@@ -26,7 +26,7 @@ export function MarketingShell({ children, global }: MarketingShellProps) {
       <LenisProvider>
         <Navbar site={site} navigation={navigation} />
         {children}
-        <WhatsAppFloat phone={site.contact.phone} />
+        <WhatsAppFloat whatsapp={site.whatsapp} />
         <Footer content={footer} site={site} />
       </LenisProvider>
     </>

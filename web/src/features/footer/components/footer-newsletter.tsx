@@ -1,10 +1,11 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   footerHeadingClassName,
   footerMutedTextClassName,
 } from "@/features/footer/components/footer-link-styles";
 import type { FooterNewsletterContent } from "@/features/footer/types";
+import { NewsletterSubscribeForm } from "@/features/newsletter/components/newsletter-subscribe-form";
+import { NEWSLETTER_SOURCES } from "@/constants/operational";
+import { getSystemMessages } from "@/services/system";
 import { cn } from "@/lib/utils";
 
 type FooterNewsletterProps = {
@@ -12,7 +13,12 @@ type FooterNewsletterProps = {
   className?: string;
 };
 
-export function FooterNewsletter({ content, className }: FooterNewsletterProps) {
+export async function FooterNewsletter({
+  content,
+  className,
+}: FooterNewsletterProps) {
+  const messages = await getSystemMessages();
+
   return (
     <section
       aria-labelledby="footer-newsletter-heading"
@@ -32,29 +38,19 @@ export function FooterNewsletter({ content, className }: FooterNewsletterProps) 
             </p>
           </div>
 
-          <form className="w-full max-w-md" noValidate>
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-3">
-              <div className="flex-1">
-                <label htmlFor="footer-newsletter-email" className="sr-only">
-                  {content.emailLabel}
-                </label>
-                <Input
-                  id="footer-newsletter-email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  placeholder={content.emailPlaceholder}
-                  className="h-10 border-footer-foreground/15 bg-footer-foreground/10 text-footer-foreground placeholder:text-footer-muted sm:h-9"
-                />
-              </div>
-              <Button
-                type="button"
-                className="h-10 w-full shrink-0 rounded-lg border-transparent bg-white text-primary hover:bg-brand-beige sm:h-9 sm:w-auto"
-              >
-                {content.submitLabel}
-              </Button>
-            </div>
-          </form>
+          <NewsletterSubscribeForm
+            source={NEWSLETTER_SOURCES.footer}
+            surface="footer"
+            emailLabel={content.emailLabel}
+            emailPlaceholder={content.emailPlaceholder}
+            submitLabel={content.submitLabel}
+            emailInputId="footer-newsletter-email"
+            formClassName="w-full max-w-md"
+            inputClassName="border-footer-foreground/15 bg-footer-foreground/10 text-footer-foreground placeholder:text-footer-muted"
+            buttonClassName="rounded-lg border-transparent bg-white text-primary hover:bg-brand-beige"
+            successMessage={messages.newsletterSubscribeSuccess}
+            alreadySubscribedMessage={messages.newsletterAlreadySubscribed}
+          />
         </div>
       </div>
     </section>

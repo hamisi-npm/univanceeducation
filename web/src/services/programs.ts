@@ -3,17 +3,13 @@ import { cache } from "react";
 import { sanityTags } from "@/lib/sanity/cache-tags";
 import { sanityFetch } from "@/lib/sanity/fetch";
 import { singletonDocumentIds } from "@/lib/sanity/singletons";
-import { mapProgramCard, mapProgramDetail } from "@/mappers/program";
+import { mapProgramDetail } from "@/mappers/program";
 import {
   mapProgramCards,
   mapProgramFilterOptions,
   mapProgramsPage,
 } from "@/mappers/programs";
 import {
-  courseCategoriesQuery,
-  degreeTypesQuery,
-  facultiesQuery,
-  featuredProgramsQuery,
   programBySlugQuery,
   programFilterOptionsQuery,
   programSlugsQuery,
@@ -22,14 +18,12 @@ import {
   programsFilteredQuery,
   programsPageQuery,
   relatedProgramsQuery,
-  studyLevelsQuery,
 } from "@/queries/programs";
 import type {
   SanityProgramCard,
   SanityProgramDetailDocument,
   SanityProgramFilterOptions,
   SanityProgramsPageDocument,
-  SanityTaxonomyOption,
 } from "@/types/sanity/programs";
 import type {
   ProgramCard,
@@ -40,7 +34,7 @@ import type {
   ProgramsPageData,
 } from "@/types/programs";
 
-export const PROGRAMS_PAGE_SIZE = 12;
+const PROGRAMS_PAGE_SIZE = 12;
 
 function normalizeFilter(value?: string): string {
   return value?.trim() ?? "";
@@ -193,56 +187,3 @@ export const getRelatedPrograms = cache(
     return mapProgramCards(items);
   },
 );
-
-export const getFeaturedPrograms = cache(
-  async (limit = 6): Promise<ProgramCard[]> => {
-    const items = await sanityFetch<SanityProgramCard[]>({
-      query: featuredProgramsQuery,
-      params: { limit },
-      tags: [sanityTags.programs, sanityTags.program],
-    });
-
-    return mapProgramCards(items);
-  },
-);
-
-export const getCourseCategories = cache(async () => {
-  return (
-    (await sanityFetch<SanityTaxonomyOption[]>({
-      query: courseCategoriesQuery,
-      tags: [sanityTags.courseCategory],
-    })) ?? []
-  );
-});
-
-export const getStudyLevels = cache(async () => {
-  return (
-    (await sanityFetch<SanityTaxonomyOption[]>({
-      query: studyLevelsQuery,
-      tags: [sanityTags.studyLevel],
-    })) ?? []
-  );
-});
-
-export const getFaculties = cache(async () => {
-  return (
-    (await sanityFetch<SanityTaxonomyOption[]>({
-      query: facultiesQuery,
-      tags: [sanityTags.faculty],
-    })) ?? []
-  );
-});
-
-export const getDegreeTypes = cache(async () => {
-  return (
-    (await sanityFetch<SanityTaxonomyOption[]>({
-      query: degreeTypesQuery,
-      tags: [sanityTags.degreeType],
-    })) ?? []
-  );
-});
-
-/** Helper used when building related-program params from a detail document. */
-export function toProgramCards(items: SanityProgramCard[]): ProgramCard[] {
-  return items.map(mapProgramCard);
-}

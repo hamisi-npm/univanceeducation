@@ -3,8 +3,8 @@ import { defineLive } from "next-sanity/live";
 import { client } from "@/lib/sanity/client";
 
 /**
- * Live Content API — render `<SanityLive />` in the root layout.
- * Server data fetching uses `sanityFetch` in `./fetch.ts` with cache tags.
+ * Live Content API — mount `<SanityLive />` only while Draft Mode is on
+ * (Presentation / Visual Editing). Published traffic uses tagged ISR fetches.
  */
 export const { SanityLive } = defineLive({
   client,

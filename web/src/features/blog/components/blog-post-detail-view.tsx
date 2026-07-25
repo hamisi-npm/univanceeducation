@@ -57,15 +57,17 @@ export function BlogPostDetailView({ post }: BlogPostDetailViewProps) {
           </div>
 
           <div className="relative mx-auto mt-10 aspect-[16/9] max-w-4xl overflow-hidden rounded-lg border border-border/80 bg-muted shadow-sm ring-1 ring-border/40">
-            <Image
-              src={post.coverImage.src}
-              alt={post.coverImage.alt}
-              fill
-              priority
-              quality={85}
-              sizes="(max-width: 1024px) 100vw, 896px"
-              className="object-cover object-center"
-            />
+            {post.coverImage?.src ? (
+              <Image
+                src={post.coverImage.src}
+                alt={post.coverImage.alt}
+                fill
+                priority
+                quality={85}
+                sizes="(max-width: 1024px) 100vw, 896px"
+                className="object-cover object-center"
+              />
+            ) : null}
           </div>
         </Container>
       </section>

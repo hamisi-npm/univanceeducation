@@ -35,10 +35,7 @@ export function mapProgramCard(program: SanityProgramCard): ProgramCard {
     slug,
     title: program.title || "",
     featured: program.featured ?? false,
-    image: resolveSanityImage(program.featuredImage, {
-      src: "",
-      alt: program.title || "",
-    }),
+    image: resolveSanityImage(program.featuredImage),
     shortDescription: program.shortDescription || "",
     duration: program.duration || "",
     currency,
@@ -68,12 +65,10 @@ export function mapProgramDetail(
   return {
     ...card,
     gallery:
-      document.gallery?.map((image, index) =>
-        resolveSanityImage(image, {
-          src: "",
-          alt: `${document.title || "Program"} gallery ${index + 1}`,
-        }),
-      ) ?? [],
+      document.gallery
+        ?.map((image) => resolveSanityImage(image))
+        .filter((image): image is NonNullable<typeof image> => image !== null) ??
+      [],
     overview: blocksToParagraphs(document.overview),
     highlights: document.highlights?.filter(Boolean) ?? [],
     quickFacts:
@@ -107,10 +102,7 @@ export function mapProgramDetail(
       type: university?.type || "",
       description: university?.description || "",
       tuitionRange: university?.tuitionRange || "",
-      image: resolveSanityImage(university?.image ?? null, {
-        src: "",
-        alt: university?.name || "",
-      }),
+      image: resolveSanityImage(university?.image ?? null),
       destinationCountry: destination?.country || "",
       destinationSlug: destination?.slug || "",
       destinationFlag: destination?.flag || "",

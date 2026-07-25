@@ -7,7 +7,7 @@ import {
 type RevalidatePayload = {
   _type?: string;
   _id?: string;
-  kind?: "privacy" | "terms";
+  kind?: "privacy" | "terms" | string;
   slug?: { current?: string } | string;
 };
 
@@ -43,6 +43,10 @@ const documentTypeTags: Record<string, SanityCacheTag[]> = {
   author: [sanityTags.blogPost, sanityTags.blog],
   blogCategory: [sanityTags.blog],
   studyGuideCategory: [sanityTags.studyGuides],
+  newsletterPage: [sanityTags.newsletterPages],
+  emailTemplate: [sanityTags.emailTemplates],
+  systemMessages: [sanityTags.systemMessages],
+  cookiePolicy: [sanityTags.cookiePolicy],
 };
 
 function resolveLegalPageTags(payload: RevalidatePayload): SanityCacheTag[] {

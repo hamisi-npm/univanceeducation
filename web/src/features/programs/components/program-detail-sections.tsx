@@ -71,7 +71,7 @@ export function ProgramDetailHero({ program }: ProgramDetailHeroProps) {
           </div>
 
           <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-border/80 bg-muted shadow-sm ring-1 ring-border/40">
-            {program.image.src ? (
+            {program.image?.src ? (
               <Image
                 src={program.image.src}
                 alt={program.image.alt}
@@ -338,7 +338,7 @@ export function ProgramUniversityInfo({ program }: { program: ProgramDetail }) {
       <Container>
         <div className="mx-auto grid max-w-4xl items-center gap-8 md:grid-cols-[1fr_1.2fr]">
           <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-border/80 bg-muted">
-            {university.image.src ? (
+            {university.image?.src ? (
               <Image
                 src={university.image.src}
                 alt={university.image.alt}

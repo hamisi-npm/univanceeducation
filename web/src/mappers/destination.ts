@@ -64,7 +64,7 @@ export type SanityDestinationDetailDocument = SanityDestinationCard & {
 };
 
 export type DestinationDetail = Destination & {
-  heroImage: DestinationImage;
+  heroImage: DestinationImage | null;
   gallery: DestinationImage[];
   overview: string[];
   livingCost?: string;
@@ -89,10 +89,7 @@ export function mapDestinationCard(destination: SanityDestinationCard): Destinat
     description: destination.description || "",
     studyFields: destination.studyFields?.length ? destination.studyFields : [],
     tuitionRange: destination.tuitionRange || "",
-    image: resolveSanityImage(destination.image, {
-      src: "",
-      alt: destination.country || "",
-    }),
+    image: resolveSanityImage(destination.image),
     featured: destination.featured ?? false,
     ctaLabel: destination.ctaLabel || "",
   };
@@ -100,13 +97,8 @@ export function mapDestinationCard(destination: SanityDestinationCard): Destinat
 
 function mapGalleryImage(
   image: SanityImageWithAlt,
-  index: number,
-  country: string,
-): DestinationImage {
-  return resolveSanityImage(image, {
-    src: "",
-    alt: `${country} gallery image ${index + 1}`,
-  });
+): DestinationImage | null {
+  return resolveSanityImage(image);
 }
 
 export function mapDestinationDetail(
@@ -119,9 +111,9 @@ export function mapDestinationDetail(
     ...card,
     heroImage: resolveSanityImage(document.heroImage, card.image),
     gallery:
-      document.gallery?.map((image, index) =>
-        mapGalleryImage(image, index, card.country),
-      ) ?? [],
+      document.gallery
+        ?.map((image) => mapGalleryImage(image))
+        .filter((image): image is DestinationImage => image !== null) ?? [],
     overview: overview.length ? overview : card.description ? [card.description] : [],
     livingCost: document.livingCost || "",
     duration: document.duration || "",
@@ -144,10 +136,7 @@ export function mapDestinationDetail(
           description: university.description || "",
           programs: university.programs?.length ? university.programs : [],
           tuitionRange: university.tuitionRange || "",
-          image: resolveSanityImage(university.image, {
-            src: "",
-            alt: university.name || "",
-          }),
+          image: resolveSanityImage(university.image),
           featured: university.featured ?? false,
           ctaLabel: university.ctaLabel || "",
         };
@@ -162,10 +151,7 @@ export function mapDestinationDetail(
         rating: testimonial.rating ?? 5,
         quote: testimonial.quote || "",
         featured: testimonial.featured ?? false,
-        image: resolveSanityImage(testimonial.image, {
-          src: "",
-          alt: testimonial.name || "",
-        }),
+        image: resolveSanityImage(testimonial.image),
       })) ?? [],
     seo: document.seo,
   };

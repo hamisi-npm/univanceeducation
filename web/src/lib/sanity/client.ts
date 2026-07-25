@@ -12,6 +12,3 @@ export const client = createClient({
     studioUrl: process.env.NEXT_PUBLIC_SANITY_STUDIO_URL || "http://localhost:3333",
   },
 });
-
-/** Alias used by legacy fetch helpers. */
-export const sanityClient = client;

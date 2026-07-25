@@ -1,0 +1,69 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum ConsultationStatus {
+  NEW
+  CONTACTED
+  IN_PROGRESS
+  CLOSED
+}
+
+enum NewsletterStatus {
+  PENDING
+  CONFIRMED
+  UNSUBSCRIBED
+}
+
+model Consultation {
+  id                    String             @id @default(uuid()) @db.Uuid
+  fullName              String
+  email                 String
+  phone                 String
+  preferredDestination  String
+  preferredIntake       String
+  studyLevel            String
+  message               String
+  status                ConsultationStatus @default(NEW)
+  notes                 String?
+  source                String?
+  ipHash                String?
+  archived              Boolean            @default(false)
+  createdAt             DateTime           @default(now())
+  updatedAt             DateTime           @updatedAt
+
+  @@index([email])
+  @@index([status])
+  @@index([createdAt])
+  @@index([archived])
+  @@map("consultations")
+}
+
+model NewsletterSubscriber {
+  id                    String           @id @default(uuid()) @db.Uuid
+  email                 String
+  status                NewsletterStatus @default(PENDING)
+  source                String?
+  confirmationToken     String?          @unique
+  confirmationExpiresAt DateTime?
+  unsubscribeToken      String?          @unique
+  confirmedAt           DateTime?
+  unsubscribedAt        DateTime?
+  archived              Boolean          @default(false)
+  createdAt             DateTime         @default(now())
+  updatedAt             DateTime         @updatedAt
+
+  @@unique([email])
+  @@index([status])
+  @@index([archived])
+  @@index([createdAt])
+  @@map("newsletter_subscribers")
+}

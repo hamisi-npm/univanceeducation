@@ -15,7 +15,7 @@ export type University = {
   description: string;
   programs: string[];
   tuitionRange: string;
-  image: UniversityImage;
+  image: UniversityImage | null;
   featured: boolean;
   ctaLabel: string;
 };
@@ -40,7 +40,7 @@ export type SectionHeaderContent = {
 
 export type UniversitiesHeroContent = SectionHeaderContent & {
   cta: CtaLink;
-  image: UniversityImage;
+  image: UniversityImage | null;
 };
 
 export type FeaturedUniversitiesContent = SectionHeaderContent & {

@@ -81,26 +81,28 @@ export function TestimonialCard({
             : "mx-6 mt-6 size-16 shrink-0 rounded-full border border-border",
         )}
       >
-        <Image
-          src={testimonial.image.src}
-          alt={testimonial.image.alt}
-          {...(isFeatured
-            ? {
-                fill: true,
-                sizes: "(max-width: 1024px) 100vw, 280px",
-              }
-            : {
-                width: 64,
-                height: 64,
-              })}
-          quality={80}
-          className={cn(
-            "object-cover object-center",
-            !isFeatured && "size-16 rounded-full",
-            isFeatured &&
-              "motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-[1.03]",
-          )}
-        />
+        {testimonial.image?.src ? (
+          <Image
+            src={testimonial.image.src}
+            alt={testimonial.image.alt}
+            {...(isFeatured
+              ? {
+                  fill: true,
+                  sizes: "(max-width: 1024px) 100vw, 280px",
+                }
+              : {
+                  width: 64,
+                  height: 64,
+                })}
+            quality={80}
+            className={cn(
+              "object-cover object-center",
+              !isFeatured && "size-16 rounded-full",
+              isFeatured &&
+                "motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-[1.03]",
+            )}
+          />
+        ) : null}
       </div>
 
       <div

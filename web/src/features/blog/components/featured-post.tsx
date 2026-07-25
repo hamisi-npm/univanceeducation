@@ -54,19 +54,21 @@ export function FeaturedPost({ content, article, className }: FeaturedPostProps)
               )}
             >
               <div className="relative aspect-[16/10] overflow-hidden bg-muted lg:aspect-auto lg:min-h-[320px]">
-                <Image
-                  src={article.coverImage.src}
-                  alt={article.coverImage.alt}
-                  fill
-                  priority
-                  quality={85}
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                  className={cn(
-                    "object-cover object-center",
-                    "motion-safe:transition-transform motion-safe:duration-500 motion-safe:ease-out",
-                    "motion-safe:group-hover:scale-[1.02] motion-safe:group-focus-within:scale-[1.02]",
-                  )}
-                />
+                {article.coverImage?.src ? (
+                  <Image
+                    src={article.coverImage.src}
+                    alt={article.coverImage.alt}
+                    fill
+                    priority
+                    quality={85}
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className={cn(
+                      "object-cover object-center",
+                      "motion-safe:transition-transform motion-safe:duration-500 motion-safe:ease-out",
+                      "motion-safe:group-hover:scale-[1.02] motion-safe:group-focus-within:scale-[1.02]",
+                    )}
+                  />
+                ) : null}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent lg:bg-gradient-to-r lg:from-transparent lg:via-transparent lg:to-black/10" />
               </div>
 

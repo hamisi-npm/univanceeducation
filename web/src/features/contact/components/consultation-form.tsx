@@ -20,11 +20,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { API_ROUTES } from "@/constants/operational";
 import type { ConsultationFormContent } from "@/features/contact/types";
 import {
   consultationFormSchema,
   type ConsultationFormValues,
-} from "@/features/contact/data/consultation-schema";
+} from "@/features/consultations/validation";
+import { ApiClientError, postJson } from "@/lib/api/client";
 import { cardStyles } from "@/lib/section-styles";
 import { cn } from "@/lib/utils";
 
@@ -35,6 +37,7 @@ type ConsultationFormProps = {
 
 export function ConsultationForm({ content, className }: ConsultationFormProps) {
   const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const form = useForm<ConsultationFormValues>({
     resolver: zodResolver(consultationFormSchema),
@@ -49,8 +52,21 @@ export function ConsultationForm({ content, className }: ConsultationFormProps) 
     },
   });
 
-  function onSubmit() {
-    setSubmitted(true);
+  async function onSubmit(values: ConsultationFormValues) {
+    setSubmitError(null);
+
+    try {
+      await postJson(API_ROUTES.contact, values);
+      setSubmitted(true);
+      form.reset();
+    } catch (error) {
+      if (error instanceof ApiClientError) {
+        setSubmitError(error.message);
+        return;
+      }
+
+      setSubmitError("Something went wrong. Please try again.");
+    }
   }
 
   if (submitted) {
@@ -75,6 +91,8 @@ export function ConsultationForm({ content, className }: ConsultationFormProps) 
     );
   }
 
+  const isSubmitting = form.formState.isSubmitting;
+
   return (
     <form
       onSubmit={form.handleSubmit(onSubmit)}
@@ -94,6 +112,7 @@ export function ConsultationForm({ content, className }: ConsultationFormProps) 
             placeholder={content.fields.fullName.placeholder}
             aria-invalid={!!form.formState.errors.fullName}
             className="h-10"
+            disabled={isSubmitting}
             {...form.register("fullName")}
           />
           <FieldError errors={[form.formState.errors.fullName]} />
@@ -109,6 +128,7 @@ export function ConsultationForm({ content, className }: ConsultationFormProps) 
               placeholder={content.fields.email.placeholder}
               aria-invalid={!!form.formState.errors.email}
               className="h-10"
+              disabled={isSubmitting}
               {...form.register("email")}
             />
             <FieldError errors={[form.formState.errors.email]} />
@@ -123,6 +143,7 @@ export function ConsultationForm({ content, className }: ConsultationFormProps) 
               placeholder={content.fields.phone.placeholder}
               aria-invalid={!!form.formState.errors.phone}
               className="h-10"
+              disabled={isSubmitting}
               {...form.register("phone")}
             />
             <FieldError errors={[form.formState.errors.phone]} />
@@ -138,7 +159,11 @@ export function ConsultationForm({ content, className }: ConsultationFormProps) 
               control={form.control}
               name="preferredDestination"
               render={({ field }) => (
-                <Select value={field.value} onValueChange={field.onChange}>
+                <Select
+                  value={field.value}
+                  onValueChange={field.onChange}
+                  disabled={isSubmitting}
+                >
                   <SelectTrigger
                     id="preferredDestination"
                     className="w-full"
@@ -169,7 +194,11 @@ export function ConsultationForm({ content, className }: ConsultationFormProps) 
               control={form.control}
               name="preferredIntake"
               render={({ field }) => (
-                <Select value={field.value} onValueChange={field.onChange}>
+                <Select
+                  value={field.value}
+                  onValueChange={field.onChange}
+                  disabled={isSubmitting}
+                >
                   <SelectTrigger
                     id="preferredIntake"
                     className="w-full"
@@ -200,7 +229,11 @@ export function ConsultationForm({ content, className }: ConsultationFormProps) 
               control={form.control}
               name="studyLevel"
               render={({ field }) => (
-                <Select value={field.value} onValueChange={field.onChange}>
+                <Select
+                  value={field.value}
+                  onValueChange={field.onChange}
+                  disabled={isSubmitting}
+                >
                   <SelectTrigger
                     id="studyLevel"
                     className="w-full"
@@ -231,13 +264,20 @@ export function ConsultationForm({ content, className }: ConsultationFormProps) 
             rows={5}
             placeholder={content.fields.message.placeholder}
             aria-invalid={!!form.formState.errors.message}
+            disabled={isSubmitting}
             {...form.register("message")}
           />
           <FieldError errors={[form.formState.errors.message]} />
         </Field>
 
-        <Button type="submit" className="h-10 w-full sm:w-auto">
-          {content.submitLabel}
+        {submitError ? (
+          <p className="text-sm text-destructive" role="alert">
+            {submitError}
+          </p>
+        ) : null}
+
+        <Button type="submit" className="h-10 w-full sm:w-auto" disabled={isSubmitting}>
+          {isSubmitting ? "Sending…" : content.submitLabel}
         </Button>
       </FieldGroup>
     </form>

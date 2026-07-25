@@ -86,7 +86,7 @@ export function mapBlogPage(
       heading: document.hero?.heading || "",
       description: document.hero?.description || "",
       cta: mapCtaLink(document.hero?.cta),
-      image: resolveSanityImage(document.hero?.image, { src: "", alt: "" }),
+      image: resolveSanityImage(document.hero?.image),
     },
     featuredPost: mapSectionHeader(document.featuredPost),
     latestArticles: mapSectionHeader(document.latestArticles),

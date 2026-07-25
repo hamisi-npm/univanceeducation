@@ -1,1 +1,1 @@
-export { TestimonialsSection } from "@/features/testimonials/components/testimonials-section";
+export { TestimonialCard } from "@/features/testimonials/components/testimonial-card";
