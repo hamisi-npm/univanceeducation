@@ -9,13 +9,21 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 import { API_ROUTES } from "@/constants/operational";
-import { badRequest } from "@/lib/api/errors";
 import {
   assertHoneypotEmpty,
-  assertJsonBodyWithinLimit,
   enforceRateLimit,
+  rateLimitHeaders,
   rateLimitKeyFromRequest,
 } from "@/lib/security/rate-limit";
+import {
+  assertContentLengthWithinLimit,
+  readJsonBodyWithinLimit,
+} from "@/lib/security/request-body";
+import {
+  readTurnstileToken,
+  verifyTurnstileToken,
+} from "@/lib/security/turnstile";
+import { getRequestIp } from "@/lib/security/ip-hash";
 
 export function newsletterMethodNotAllowed() {
   return handleRouteError(methodNotAllowed(["POST"]));
@@ -27,23 +35,30 @@ export function newsletterConfirmMethodNotAllowed() {
 
 export async function handleSubscribeNewsletter(request: NextRequest) {
   try {
-    assertJsonBodyWithinLimit(request);
-    enforceRateLimit(rateLimitKeyFromRequest(request, "newsletter"), {
-      maxRequests: 8,
-      windowMs: 60_000,
-    });
+    assertContentLengthWithinLimit(request);
 
-    let body: unknown;
-    try {
-      body = await request.json();
-    } catch {
-      return handleRouteError(badRequest("Request body must be valid JSON."));
-    }
+    const rate = await enforceRateLimit(
+      rateLimitKeyFromRequest(request, "newsletter"),
+      {
+        maxRequests: 8,
+        windowMs: 60_000,
+      },
+    );
+
+    const body = await readJsonBodyWithinLimit(request);
+
+    await verifyTurnstileToken(readTurnstileToken(body), {
+      remoteip: getRequestIp(request.headers),
+    });
 
     assertHoneypotEmpty(body);
 
     const data = await subscribeNewsletter(body);
-    return jsonSuccess(data, data.alreadySubscribed ? 200 : 201);
+    return jsonSuccess(
+      data,
+      data.alreadySubscribed ? 200 : 201,
+      rateLimitHeaders(rate),
+    );
   } catch (error) {
     return handleRouteError(error);
   }

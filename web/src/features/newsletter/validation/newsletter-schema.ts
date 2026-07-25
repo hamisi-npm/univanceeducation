@@ -10,6 +10,12 @@ const newsletterSourceValues = Object.values(NEWSLETTER_SOURCES) as [
 export const newsletterSubscribeSchema = z.object({
   email: z.email("Please enter a valid email address"),
   source: z.enum(newsletterSourceValues).optional(),
+  /** Honeypot — must stay empty; enforced by `assertHoneypotEmpty` before parse. */
+  website: z.string().default(""),
+  /** Cloudflare Turnstile token — verified server-side before Zod parse. */
+  turnstileToken: z
+    .string()
+    .min(1, "Please complete the security check."),
 });
 
 export const newsletterConfirmSchema = z.object({

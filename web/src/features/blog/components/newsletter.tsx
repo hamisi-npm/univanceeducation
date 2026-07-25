@@ -3,6 +3,7 @@ import type { NewsletterContent } from "@/features/blog/types";
 import { NewsletterSubscribeForm } from "@/features/newsletter/components/newsletter-subscribe-form";
 import { NEWSLETTER_SOURCES } from "@/constants/operational";
 import { cardStyles, sectionStyles } from "@/lib/section-styles";
+import { getTurnstileSiteKey } from "@/lib/security/turnstile";
 import { getSystemMessages } from "@/services/system";
 import { cn } from "@/lib/utils";
 
@@ -12,7 +13,10 @@ type NewsletterProps = {
 };
 
 export async function Newsletter({ content, className }: NewsletterProps) {
-  const messages = await getSystemMessages();
+  const [messages, turnstileSiteKey] = await Promise.all([
+    getSystemMessages(),
+    Promise.resolve(getTurnstileSiteKey()),
+  ]);
 
   return (
     <section
@@ -48,19 +52,26 @@ export async function Newsletter({ content, className }: NewsletterProps) {
               </p>
             </div>
 
-            <NewsletterSubscribeForm
-              source={NEWSLETTER_SOURCES.blog}
-              surface="default"
-              emailLabel={content.emailLabel}
-              emailPlaceholder={content.emailPlaceholder}
-              submitLabel={content.submitLabel}
-              emailInputId="blog-newsletter-email"
-              formClassName="mx-auto w-full max-w-md"
-              inputClassName="bg-background"
-              privacyNote={content.privacyNote}
-              successMessage={messages.newsletterSubscribeSuccess}
-              alreadySubscribedMessage={messages.newsletterAlreadySubscribed}
-            />
+            {turnstileSiteKey ? (
+              <NewsletterSubscribeForm
+                source={NEWSLETTER_SOURCES.blog}
+                surface="default"
+                emailLabel={content.emailLabel}
+                emailPlaceholder={content.emailPlaceholder}
+                submitLabel={content.submitLabel}
+                emailInputId="blog-newsletter-email"
+                turnstileSiteKey={turnstileSiteKey}
+                formClassName="mx-auto w-full max-w-md"
+                inputClassName="bg-background"
+                privacyNote={content.privacyNote}
+                successMessage={messages.newsletterSubscribeSuccess}
+                alreadySubscribedMessage={messages.newsletterAlreadySubscribed}
+              />
+            ) : (
+              <p className="text-sm text-muted-foreground" role="status">
+                Newsletter signup is temporarily unavailable.
+              </p>
+            )}
           </div>
         </div>
       </Container>

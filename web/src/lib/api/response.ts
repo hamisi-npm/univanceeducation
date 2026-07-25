@@ -38,10 +38,27 @@ export function jsonError(
   }
 
   if (error.code === "TOO_MANY_REQUESTS" && error.details) {
-    const retryAfter = (error.details as { retryAfterSeconds?: number })
-      .retryAfterSeconds;
-    if (retryAfter && retryAfter > 0) {
-      responseHeaders.set("Retry-After", String(retryAfter));
+    const details = error.details as {
+      retryAfterSeconds?: number;
+      limit?: number;
+      remaining?: number;
+      reset?: number;
+    };
+
+    if (details.retryAfterSeconds && details.retryAfterSeconds > 0) {
+      responseHeaders.set("Retry-After", String(details.retryAfterSeconds));
+    }
+    if (typeof details.limit === "number") {
+      responseHeaders.set("RateLimit-Limit", String(details.limit));
+    }
+    if (typeof details.remaining === "number") {
+      responseHeaders.set(
+        "RateLimit-Remaining",
+        String(Math.max(0, details.remaining)),
+      );
+    }
+    if (typeof details.reset === "number") {
+      responseHeaders.set("RateLimit-Reset", String(details.reset));
     }
   }
 

@@ -1,55 +1,97 @@
 import { getRequestIp } from "@/lib/security/ip-hash";
 import { ApiError } from "@/lib/api/errors";
+import {
+  enforceMemoryRateLimit,
+  rateLimitUnavailable,
+  type RateLimitInfo,
+  type RateLimitOptions,
+} from "@/lib/security/rate-limit-memory";
+import {
+  enforceRedisRateLimit,
+  isUpstashConfigured,
+  type RedisRateLimitClient,
+} from "@/lib/security/rate-limit-redis";
 
-type RateLimitBucket = {
-  hits: number[];
-};
+export {
+  DEFAULT_MAX_REQUESTS,
+  DEFAULT_WINDOW_MS,
+  rateLimitHeaders,
+  resetMemoryRateLimitBuckets,
+  tooManyRequests,
+  type RateLimitInfo,
+  type RateLimitOptions,
+} from "@/lib/security/rate-limit-memory";
 
-const buckets = new Map<string, RateLimitBucket>();
+export { resetRedisRateLimitCache } from "@/lib/security/rate-limit-redis";
 
-const DEFAULT_WINDOW_MS = 60_000;
-const DEFAULT_MAX_REQUESTS = 5;
-
-export function tooManyRequests(
-  message = "Too many requests. Please try again later.",
-  retryAfterSeconds = 60,
-): ApiError {
-  return new ApiError("TOO_MANY_REQUESTS", message, 429, {
-    retryAfterSeconds,
-  });
-}
+export type RateLimitFailMode = "memory" | "unavailable";
 
 /**
- * In-memory sliding-window rate limit (per server instance).
- * Suitable as lightweight production protection for public form APIs.
+ * Production + Redis configured but unreachable → 503 (fail closed).
+ * Development / explicit memory mode → fall back to in-process Map.
  */
-export function enforceRateLimit(
-  key: string,
-  options?: {
-    maxRequests?: number;
-    windowMs?: number;
-  },
-): void {
-  const maxRequests = options?.maxRequests ?? DEFAULT_MAX_REQUESTS;
-  const windowMs = options?.windowMs ?? DEFAULT_WINDOW_MS;
-  const now = Date.now();
-  const windowStart = now - windowMs;
-
-  const bucket = buckets.get(key) ?? { hits: [] };
-  bucket.hits = bucket.hits.filter((timestamp) => timestamp > windowStart);
-
-  if (bucket.hits.length >= maxRequests) {
-    const oldest = bucket.hits[0] ?? now;
-    const retryAfterSeconds = Math.max(
-      1,
-      Math.ceil((oldest + windowMs - now) / 1000),
-    );
-    buckets.set(key, bucket);
-    throw tooManyRequests(undefined, retryAfterSeconds);
+export function resolveRateLimitFailMode(
+  nodeEnv = process.env.NODE_ENV,
+  explicit = process.env.RATE_LIMIT_REDIS_FAIL_MODE,
+): RateLimitFailMode {
+  const normalized = explicit?.trim().toLowerCase();
+  if (normalized === "memory" || normalized === "unavailable") {
+    return normalized;
   }
 
-  bucket.hits.push(now);
-  buckets.set(key, bucket);
+  return nodeEnv === "production" ? "unavailable" : "memory";
+}
+
+export type EnforceRateLimitOptions = RateLimitOptions & {
+  /** Injected Redis client for tests. */
+  redisClient?: RedisRateLimitClient;
+  /** Force backend selection in tests. */
+  forceBackend?: "redis" | "memory";
+  failMode?: RateLimitFailMode;
+};
+
+/**
+ * Distributed rate limit when Upstash is configured; otherwise in-memory.
+ * Public signature stays `enforceRateLimit` — now async for Redis I/O.
+ */
+export async function enforceRateLimit(
+  key: string,
+  options?: EnforceRateLimitOptions,
+): Promise<RateLimitInfo> {
+  const useRedis =
+    options?.forceBackend === "redis" ||
+    (options?.forceBackend !== "memory" &&
+      (options?.redisClient != null || isUpstashConfigured()));
+
+  if (!useRedis) {
+    return enforceMemoryRateLimit(key, options);
+  }
+
+  try {
+    return await enforceRedisRateLimit(key, {
+      maxRequests: options?.maxRequests,
+      windowMs: options?.windowMs,
+      client: options?.redisClient,
+    });
+  } catch (error) {
+    if (error instanceof ApiError && error.code === "TOO_MANY_REQUESTS") {
+      throw error;
+    }
+
+    const failMode =
+      options?.failMode ?? resolveRateLimitFailMode();
+
+    if (failMode === "memory") {
+      console.warn(
+        "[rate-limit] Redis unavailable; falling back to in-memory limiter",
+        error,
+      );
+      return enforceMemoryRateLimit(key, options);
+    }
+
+    console.error("[rate-limit] Redis unavailable; failing closed", error);
+    throw rateLimitUnavailable();
+  }
 }
 
 export function rateLimitKeyFromRequest(
@@ -74,16 +116,8 @@ export function assertHoneypotEmpty(body: unknown): void {
   }
 }
 
-const MAX_JSON_BYTES = 16_384;
-
-export function assertJsonBodyWithinLimit(request: Request): void {
-  const contentLength = request.headers.get("content-length");
-  if (!contentLength) {
-    return;
-  }
-
-  const size = Number(contentLength);
-  if (Number.isFinite(size) && size > MAX_JSON_BYTES) {
-    throw new ApiError("BAD_REQUEST", "Request body is too large.", 413);
-  }
-}
+export {
+  assertJsonBodyWithinLimit,
+  MAX_JSON_BODY_BYTES,
+  readJsonBodyWithinLimit,
+} from "@/lib/security/request-body";

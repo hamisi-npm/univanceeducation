@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, type Resolver } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -20,6 +20,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  HONEYPOT_FIELD_NAME,
+  HoneypotField,
+} from "@/components/shared/honeypot-field";
+import {
+  resetTurnstileWidget,
+  TurnstileWidget,
+} from "@/components/shared/turnstile-widget";
 import { API_ROUTES } from "@/constants/operational";
 import type { ConsultationFormContent } from "@/features/contact/types";
 import {
@@ -32,15 +40,25 @@ import { cn } from "@/lib/utils";
 
 type ConsultationFormProps = {
   content: ConsultationFormContent;
+  turnstileSiteKey: string;
   className?: string;
 };
 
-export function ConsultationForm({ content, className }: ConsultationFormProps) {
+export function ConsultationForm({
+  content,
+  turnstileSiteKey,
+  className,
+}: ConsultationFormProps) {
   const [submitted, setSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [turnstileWidgetId, setTurnstileWidgetId] = useState<string | null>(
+    null,
+  );
 
   const form = useForm<ConsultationFormValues>({
-    resolver: zodResolver(consultationFormSchema),
+    resolver: zodResolver(
+      consultationFormSchema,
+    ) as Resolver<ConsultationFormValues>,
     defaultValues: {
       fullName: "",
       email: "",
@@ -49,17 +67,31 @@ export function ConsultationForm({ content, className }: ConsultationFormProps) 
       preferredIntake: "",
       studyLevel: "",
       message: "",
+      website: "",
+      turnstileToken: "",
     },
   });
 
   async function onSubmit(values: ConsultationFormValues) {
     setSubmitError(null);
 
+    if (!values.turnstileToken?.trim()) {
+      form.setError("turnstileToken", {
+        type: "manual",
+        message: "Please complete the security check.",
+      });
+      return;
+    }
+
     try {
       await postJson(API_ROUTES.contact, values);
       setSubmitted(true);
       form.reset();
+      resetTurnstileWidget(turnstileWidgetId);
     } catch (error) {
+      resetTurnstileWidget(turnstileWidgetId);
+      form.setValue("turnstileToken", "");
+
       if (error instanceof ApiClientError) {
         setSubmitError(error.message);
         return;
@@ -92,6 +124,7 @@ export function ConsultationForm({ content, className }: ConsultationFormProps) 
   }
 
   const isSubmitting = form.formState.isSubmitting;
+  const turnstileError = form.formState.errors.turnstileToken;
 
   return (
     <form
@@ -100,9 +133,14 @@ export function ConsultationForm({ content, className }: ConsultationFormProps) 
       className={cn(
         cardStyles.base,
         cardStyles.padding,
+        "relative",
         className,
       )}
     >
+      <HoneypotField
+        id="consultation-website"
+        registration={form.register(HONEYPOT_FIELD_NAME)}
+      />
       <FieldGroup>
         <Field data-invalid={!!form.formState.errors.fullName}>
           <FieldLabel htmlFor="fullName">{content.fields.fullName.label}</FieldLabel>
@@ -268,6 +306,36 @@ export function ConsultationForm({ content, className }: ConsultationFormProps) 
             {...form.register("message")}
           />
           <FieldError errors={[form.formState.errors.message]} />
+        </Field>
+
+        <Field data-invalid={!!turnstileError}>
+          <FieldLabel className="sr-only">Security check</FieldLabel>
+          <TurnstileWidget
+            siteKey={turnstileSiteKey}
+            onToken={(token) => {
+              form.setValue("turnstileToken", token, {
+                shouldValidate: true,
+                shouldDirty: true,
+              });
+              form.clearErrors("turnstileToken");
+            }}
+            onExpire={() => {
+              form.setValue("turnstileToken", "");
+              form.setError("turnstileToken", {
+                type: "manual",
+                message: "Please complete the security check.",
+              });
+            }}
+            onError={() => {
+              form.setValue("turnstileToken", "");
+              form.setError("turnstileToken", {
+                type: "manual",
+                message: "Please complete the security check.",
+              });
+            }}
+            onWidgetId={setTurnstileWidgetId}
+          />
+          <FieldError errors={[turnstileError]} />
         </Field>
 
         {submitError ? (

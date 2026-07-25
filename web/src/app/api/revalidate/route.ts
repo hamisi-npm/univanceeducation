@@ -1,12 +1,14 @@
 import { revalidateTag } from "next/cache";
-import { type NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { parseBody } from "next-sanity/webhook";
 import { z } from "zod";
 
+import { ApiError } from "@/lib/api/errors";
 import { resolveRevalidateTags } from "@/lib/sanity/revalidate-tags";
-
-/** Keep webhook deliveries bounded without reading unbounded streams. */
-const MAX_BODY_BYTES = 16_384;
+import {
+  MAX_JSON_BODY_BYTES,
+  readBodyBytesWithinLimit,
+} from "@/lib/security/request-body";
 
 /**
  * Minimal payload contract for tag resolution.
@@ -53,6 +55,13 @@ function badRequestResponse(): NextResponse {
   );
 }
 
+function payloadTooLargeResponse(): NextResponse {
+  return NextResponse.json(
+    { revalidated: false, message: "Request body is too large." },
+    { status: 413 },
+  );
+}
+
 function serverErrorResponse(): NextResponse {
   return NextResponse.json(
     { revalidated: false, message: "Unexpected server error." },
@@ -76,6 +85,27 @@ export function DELETE() {
   return methodNotAllowedResponse();
 }
 
+/**
+ * Rebuilds a Request with a size-capped body so `parseBody` can verify the
+ * Sanity webhook HMAC against the exact bytes we accepted.
+ */
+function requestWithLimitedBody(
+  request: NextRequest,
+  body: Uint8Array,
+): NextRequest {
+  const headers = new Headers(request.headers);
+  headers.set("content-length", String(body.byteLength));
+
+  const bodyCopy = new Uint8Array(body.byteLength);
+  bodyCopy.set(body);
+
+  return new NextRequest(request.url, {
+    method: request.method,
+    headers,
+    body: new Blob([bodyCopy]),
+  });
+}
+
 export async function POST(request: NextRequest) {
   try {
     const secret = process.env.SANITY_REVALIDATE_SECRET?.trim();
@@ -88,10 +118,17 @@ export async function POST(request: NextRequest) {
       return serverErrorResponse();
     }
 
-    const contentLength = request.headers.get("content-length");
-
-    if (contentLength && Number(contentLength) > MAX_BODY_BYTES) {
-      return badRequestResponse();
+    let limitedBody: Uint8Array;
+    try {
+      limitedBody = await readBodyBytesWithinLimit(
+        request,
+        MAX_JSON_BODY_BYTES,
+      );
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 413) {
+        return payloadTooLargeResponse();
+      }
+      throw error;
     }
 
     let isValidSignature: boolean | null;
@@ -100,7 +137,11 @@ export async function POST(request: NextRequest) {
     try {
       // Official helper: raw body read, HMAC verification, JSON parse.
       // `false` preserves immediate revalidation (no Content Lake delay).
-      const result = await parseBody<WebhookPayload>(request, secret, false);
+      const result = await parseBody<WebhookPayload>(
+        requestWithLimitedBody(request, limitedBody),
+        secret,
+        false,
+      );
       isValidSignature = result.isValidSignature;
       parsed = result.body;
     } catch {
@@ -138,7 +179,10 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({ revalidated: true });
-  } catch {
+  } catch (error) {
+    if (error instanceof ApiError && error.status === 413) {
+      return payloadTooLargeResponse();
+    }
     return serverErrorResponse();
   }
 }

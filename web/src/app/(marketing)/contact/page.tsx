@@ -14,6 +14,7 @@ import { createCmsPageMetadata } from "@/lib/metadata";
 import { formatOfficeAddressInline } from "@/lib/format-office-address";
 import { getContactPage } from "@/services/contact";
 import { getSiteConfig } from "@/services/site";
+import { getTurnstileSiteKey } from "@/lib/security/turnstile";
 import { sectionStyles } from "@/lib/section-styles";
 import { cn } from "@/lib/utils";
 
@@ -34,6 +35,8 @@ export async function generateMetadata() {
 }
 
 function ConsultationFormSection({ content }: { content: ConsultationFormContent }) {
+  const turnstileSiteKey = getTurnstileSiteKey();
+
   return (
     <section
       id="consultation-form"
@@ -61,7 +64,17 @@ function ConsultationFormSection({ content }: { content: ConsultationFormContent
             <p className={sectionStyles.description}>{content.description}</p>
           </div>
 
-          <ConsultationForm content={content} />
+          {turnstileSiteKey ? (
+            <ConsultationForm
+              content={content}
+              turnstileSiteKey={turnstileSiteKey}
+            />
+          ) : (
+            <p className="text-sm text-muted-foreground" role="status">
+              The consultation form is temporarily unavailable. Please try again
+              later or contact us directly.
+            </p>
+          )}
         </div>
       </Container>
     </section>

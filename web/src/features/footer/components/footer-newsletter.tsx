@@ -5,6 +5,7 @@ import {
 import type { FooterNewsletterContent } from "@/features/footer/types";
 import { NewsletterSubscribeForm } from "@/features/newsletter/components/newsletter-subscribe-form";
 import { NEWSLETTER_SOURCES } from "@/constants/operational";
+import { getTurnstileSiteKey } from "@/lib/security/turnstile";
 import { getSystemMessages } from "@/services/system";
 import { cn } from "@/lib/utils";
 
@@ -17,7 +18,10 @@ export async function FooterNewsletter({
   content,
   className,
 }: FooterNewsletterProps) {
-  const messages = await getSystemMessages();
+  const [messages, turnstileSiteKey] = await Promise.all([
+    getSystemMessages(),
+    Promise.resolve(getTurnstileSiteKey()),
+  ]);
 
   return (
     <section
@@ -38,19 +42,26 @@ export async function FooterNewsletter({
             </p>
           </div>
 
-          <NewsletterSubscribeForm
-            source={NEWSLETTER_SOURCES.footer}
-            surface="footer"
-            emailLabel={content.emailLabel}
-            emailPlaceholder={content.emailPlaceholder}
-            submitLabel={content.submitLabel}
-            emailInputId="footer-newsletter-email"
-            formClassName="w-full max-w-md"
-            inputClassName="border-footer-foreground/15 bg-footer-foreground/10 text-footer-foreground placeholder:text-footer-muted"
-            buttonClassName="rounded-lg border-transparent bg-white text-primary hover:bg-brand-beige"
-            successMessage={messages.newsletterSubscribeSuccess}
-            alreadySubscribedMessage={messages.newsletterAlreadySubscribed}
-          />
+          {turnstileSiteKey ? (
+            <NewsletterSubscribeForm
+              source={NEWSLETTER_SOURCES.footer}
+              surface="footer"
+              emailLabel={content.emailLabel}
+              emailPlaceholder={content.emailPlaceholder}
+              submitLabel={content.submitLabel}
+              emailInputId="footer-newsletter-email"
+              turnstileSiteKey={turnstileSiteKey}
+              formClassName="w-full max-w-md"
+              inputClassName="border-footer-foreground/15 bg-footer-foreground/10 text-footer-foreground placeholder:text-footer-muted"
+              buttonClassName="rounded-lg border-transparent bg-white text-primary hover:bg-brand-beige"
+              successMessage={messages.newsletterSubscribeSuccess}
+              alreadySubscribedMessage={messages.newsletterAlreadySubscribed}
+            />
+          ) : (
+            <p className={cn("text-sm", footerMutedTextClassName)} role="status">
+              Newsletter signup is temporarily unavailable.
+            </p>
+          )}
         </div>
       </div>
     </section>

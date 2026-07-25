@@ -26,8 +26,16 @@ Copy from `web/.env.example` into Vercel (Production / Preview / Development as 
 | `EMAIL_FROM` | From address |
 | `CONSULTATION_INBOX` | Staff consultation notifications |
 | `IP_HASH_SALT` | Optional; strengthens IP hashing |
+| `TURNSTILE_SITE_KEY` | Cloudflare Turnstile site key (forms) |
+| `TURNSTILE_SECRET_KEY` | Cloudflare Turnstile secret (Siteverify) |
+| `UPSTASH_REDIS_REST_URL` | Upstash Redis REST URL (distributed rate limits) |
+| `UPSTASH_REDIS_REST_TOKEN` | Upstash Redis REST token |
+| `RATE_LIMIT_REDIS_FAIL_MODE` | Optional: `memory` \| `unavailable` on Redis errors |
 
 Never commit `.env` or `.env.local`.
+
+Turnstile setup details: [`TURNSTILE.md`](./TURNSTILE.md).  
+Rate limiting setup: [`RATE_LIMITING.md`](./RATE_LIMITING.md).
 
 ## Database migrations (production)
 

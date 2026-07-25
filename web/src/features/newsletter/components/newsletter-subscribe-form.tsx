@@ -2,8 +2,16 @@
 
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, type Resolver } from "react-hook-form";
 
+import {
+  HONEYPOT_FIELD_NAME,
+  HoneypotField,
+} from "@/components/shared/honeypot-field";
+import {
+  resetTurnstileWidget,
+  TurnstileWidget,
+} from "@/components/shared/turnstile-widget";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -23,6 +31,7 @@ type NewsletterSubscribeFormProps = {
   emailPlaceholder: string;
   submitLabel: string;
   emailInputId: string;
+  turnstileSiteKey: string;
   /** `footer` uses footer design tokens for contrast on maroon surfaces. */
   surface?: "default" | "footer";
   inputClassName?: string;
@@ -34,7 +43,16 @@ type NewsletterSubscribeFormProps = {
   privacyNoteClassName?: string;
 };
 
-type FormValues = Pick<NewsletterSubscribeInput, "email">;
+type FormValues = Pick<
+  NewsletterSubscribeInput,
+  "email" | "website" | "turnstileToken"
+>;
+
+const newsletterFormSchema = newsletterSubscribeSchema.pick({
+  email: true,
+  website: true,
+  turnstileToken: true,
+});
 
 export function NewsletterSubscribeForm({
   source,
@@ -42,6 +60,7 @@ export function NewsletterSubscribeForm({
   emailPlaceholder,
   submitLabel,
   emailInputId,
+  turnstileSiteKey,
   surface = "default",
   inputClassName,
   buttonClassName,
@@ -53,15 +72,26 @@ export function NewsletterSubscribeForm({
 }: NewsletterSubscribeFormProps) {
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [turnstileWidgetId, setTurnstileWidgetId] = useState<string | null>(
+    null,
+  );
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(newsletterSubscribeSchema.pick({ email: true })),
-    defaultValues: { email: "" },
+    resolver: zodResolver(newsletterFormSchema) as Resolver<FormValues>,
+    defaultValues: { email: "", website: "", turnstileToken: "" },
   });
 
   async function onSubmit(values: FormValues) {
     setSubmitError(null);
     setStatusMessage(null);
+
+    if (!values.turnstileToken?.trim()) {
+      form.setError("turnstileToken", {
+        type: "manual",
+        message: "Please complete the security check.",
+      });
+      return;
+    }
 
     try {
       const result = await postJson<{
@@ -69,13 +99,19 @@ export function NewsletterSubscribeForm({
       }>(API_ROUTES.newsletter, {
         email: values.email,
         source,
+        website: values.website ?? "",
+        turnstileToken: values.turnstileToken,
       });
 
       setStatusMessage(
         result.alreadySubscribed ? alreadySubscribedMessage : successMessage,
       );
       form.reset();
+      resetTurnstileWidget(turnstileWidgetId);
     } catch (error) {
+      resetTurnstileWidget(turnstileWidgetId);
+      form.setValue("turnstileToken", "");
+
       if (error instanceof ApiClientError) {
         setSubmitError(error.message);
         return;
@@ -87,6 +123,7 @@ export function NewsletterSubscribeForm({
 
   const isSubmitting = form.formState.isSubmitting;
   const emailError = form.formState.errors.email?.message;
+  const turnstileError = form.formState.errors.turnstileToken?.message;
   const isFooter = surface === "footer";
 
   const statusClassName = isFooter
@@ -101,10 +138,14 @@ export function NewsletterSubscribeForm({
 
   return (
     <form
-      className={formClassName}
+      className={cn("relative", formClassName)}
       noValidate
       onSubmit={form.handleSubmit(onSubmit)}
     >
+      <HoneypotField
+        id={`${emailInputId}-website`}
+        registration={form.register(HONEYPOT_FIELD_NAME)}
+      />
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-3">
         <div className="flex-1">
           <label htmlFor={emailInputId} className="sr-only">
@@ -130,9 +171,43 @@ export function NewsletterSubscribeForm({
         </Button>
       </div>
 
+      <div className="mt-3">
+        <TurnstileWidget
+          siteKey={turnstileSiteKey}
+          onToken={(token) => {
+            form.setValue("turnstileToken", token, {
+              shouldValidate: true,
+              shouldDirty: true,
+            });
+            form.clearErrors("turnstileToken");
+          }}
+          onExpire={() => {
+            form.setValue("turnstileToken", "");
+            form.setError("turnstileToken", {
+              type: "manual",
+              message: "Please complete the security check.",
+            });
+          }}
+          onError={() => {
+            form.setValue("turnstileToken", "");
+            form.setError("turnstileToken", {
+              type: "manual",
+              message: "Please complete the security check.",
+            });
+          }}
+          onWidgetId={setTurnstileWidgetId}
+        />
+      </div>
+
       {emailError ? (
         <p className={cn("mt-2 text-sm", errorClassName)} role="alert">
           {emailError}
+        </p>
+      ) : null}
+
+      {turnstileError ? (
+        <p className={cn("mt-2 text-sm", errorClassName)} role="alert">
+          {turnstileError}
         </p>
       ) : null}
 

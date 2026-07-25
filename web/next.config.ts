@@ -30,7 +30,7 @@ function studioFrameAncestors(): string[] {
 function buildContentSecurityPolicy(): string {
   const directives = [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-inline'",
+    "script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com",
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob: https://cdn.sanity.io https://images.unsplash.com",
     "font-src 'self' data:",
@@ -40,7 +40,9 @@ function buildContentSecurityPolicy(): string {
       "https://*.apicdn.sanity.io",
       "https://*.sanity.io",
       "wss://*.api.sanity.io",
+      "https://challenges.cloudflare.com",
     ].join(" "),
+    "frame-src https://challenges.cloudflare.com",
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",
