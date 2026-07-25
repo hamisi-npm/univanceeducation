@@ -71,4 +71,6 @@ npx sanity deploy
 
 ## Sanity webhook
 
-Point publish webhooks at `https://<production-domain>/api/revalidate` with `SANITY_REVALIDATE_SECRET`. See root `docs/SANITY_WEBHOOKS.md` for payload details (paths may say `src/`; active handler is `web/src/app/api/revalidate`).
+Point publish webhooks at `https://<production-domain>/api/revalidate` with `SANITY_REVALIDATE_SECRET`.
+
+Full setup, Content Lake wait (`parseBody(..., true)` with `useCdn: true`), and **dashboard filter checklist**: root [`docs/SANITY_WEBHOOKS.md`](../../docs/SANITY_WEBHOOKS.md). Active handler: `web/src/app/api/revalidate/route.ts`.

@@ -135,12 +135,15 @@ export async function POST(request: NextRequest) {
     let parsed: WebhookPayload | null;
 
     try {
-      // Official helper: raw body read, HMAC verification, JSON parse.
-      // `false` preserves immediate revalidation (no Content Lake delay).
+      // Official helper: raw body → HMAC verify → optional consistency wait → JSON.
+      // Third arg `true` waits ~3s for Content Lake / CDN propagation.
+      // Required when the Sanity client uses `useCdn: true` (see Sanity
+      // "Validating Sanity webhooks in Next.js" + next-sanity parseBody docs).
+      // Default in next-sanity is also `true`; we pass it explicitly.
       const result = await parseBody<WebhookPayload>(
         requestWithLimitedBody(request, limitedBody),
         secret,
-        false,
+        true,
       );
       isValidSignature = result.isValidSignature;
       parsed = result.body;
