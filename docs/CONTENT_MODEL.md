@@ -54,7 +54,6 @@ Service card links use `/services#slug`.
 | `studyGuide` | Guides with category refs |
 | `studyGuideCategory` | Taxonomy |
 | `testimonial` | Student testimonials |
-| `teamMember` | About team |
 | `author` | Blog authors |
 | `faqCategory` | FAQ groups with embedded items |
 | `processStep` | Process timeline steps |

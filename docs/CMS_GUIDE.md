@@ -11,7 +11,7 @@
 ### Content
 
 - **Homepage** — hero, sections, featured content
-- **About** — page copy + team members
+- **About** — page copy
 - **Services** — landing page + individual services
 - **Destinations** — landing, destinations, universities, partners
 - **Blog** — landing, posts, categories, authors
@@ -30,7 +30,7 @@
 
 ### People
 
-- Team members and authors (also reachable under About / Blog)
+- Authors (also reachable under Blog)
 
 ### Taxonomy
 

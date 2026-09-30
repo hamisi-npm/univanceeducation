@@ -69,17 +69,6 @@ export function mapAboutPage(
           icon: asWhyChooseIcon(feature.icon, "badge-check"),
         })) ?? [],
     },
-    team: {
-      ...mapSectionHeader(document.team?.header),
-      members:
-        document.team?.members?.map((member, index) => ({
-          id: slugify(member.name) || member._id || `member-${index}`,
-          name: member.name || "",
-          position: member.position || "",
-          bio: member.bio || "",
-          image: resolveSanityImage(member.image),
-        })) ?? [],
-    },
     cta: mapCtaBanner(document.cta),
     seo: document.seo,
   };

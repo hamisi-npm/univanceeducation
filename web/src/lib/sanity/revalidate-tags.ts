@@ -37,7 +37,6 @@ const documentTypeTags: Record<string, SanityCacheTag[]> = {
   service: [sanityTags.services],
   processStep: [sanityTags.services],
   testimonial: [sanityTags.homepage],
-  teamMember: [sanityTags.about],
   partnerUniversity: [sanityTags.homepage, sanityTags.universities],
   faqCategory: [sanityTags.faqs],
   author: [sanityTags.blogPost, sanityTags.blog],

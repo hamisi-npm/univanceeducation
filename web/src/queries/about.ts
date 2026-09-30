@@ -2,15 +2,6 @@ import { defineQuery } from "next-sanity";
 
 import { imageWithAltProjection } from "@/queries/global";
 
-const teamMemberProjection = `{
-  _id,
-  name,
-  position,
-  bio,
-  order,
-  image ${imageWithAltProjection}
-}`;
-
 export const aboutPageQuery = defineQuery(`*[_type == "aboutPage" && _id == $id][0]{
   hero {
     header {
@@ -58,14 +49,6 @@ export const aboutPageQuery = defineQuery(`*[_type == "aboutPage" && _id == $id]
       description,
       icon
     }
-  },
-  team {
-    header {
-      badge,
-      heading,
-      description
-    },
-    "members": members[]->${teamMemberProjection} | order(order asc)
   },
   cta {
     badge,

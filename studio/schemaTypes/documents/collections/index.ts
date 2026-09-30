@@ -8,7 +8,6 @@ import {processStep} from './processStep'
 import {program} from './program'
 import {service} from './service'
 import {studyGuide} from './studyGuide'
-import {teamMember} from './teamMember'
 import {testimonial} from './testimonial'
 import {university} from './university'
 
@@ -18,7 +17,6 @@ export const collectionTypes: SchemaTypeDefinition[] = [
   university,
   program,
   partnerUniversity,
-  teamMember,
   processStep,
   author,
   blogPost,

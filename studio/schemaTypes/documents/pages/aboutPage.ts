@@ -20,7 +20,6 @@ export const aboutPage = defineType({
     { name: "story", title: "Company story" },
     { name: "mission", title: "Mission & vision" },
     { name: "why", title: "Why choose us" },
-    { name: "team", title: "Team" },
     { name: "cta", title: "CTA banner" },
   ],
   fields: [
@@ -153,33 +152,6 @@ export const aboutPage = defineType({
           title: "Features",
           type: "array",
           of: [defineArrayMember({ type: "whyChooseUsFeature" })],
-          validation: (rule) => rule.required().min(1),
-        }),
-      ],
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: "team",
-      title: "Team",
-      type: "object",
-      group: "team",
-      fields: [
-        defineField({
-          name: "header",
-          title: "Section header",
-          type: "sectionHeader",
-          validation: (rule) => rule.required(),
-        }),
-        defineField({
-          name: "members",
-          title: "Team members",
-          type: "array",
-          of: [
-            defineArrayMember({
-              type: "reference",
-              to: [{ type: "teamMember" }],
-            }),
-          ],
           validation: (rule) => rule.required().min(1),
         }),
       ],

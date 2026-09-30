@@ -3,7 +3,6 @@ import {
   AboutHero,
   CompanyStory,
   MissionVision,
-  TeamSection,
   WhyChooseUs,
 } from "@/features/about";
 import { PageJsonLd } from "@/components/seo/page-json-ld";
@@ -25,7 +24,6 @@ export default async function AboutPage() {
       <CompanyStory content={about.companyStory} />
       <MissionVision content={about.missionVision} />
       <WhyChooseUs content={about.whyChooseUs} />
-      <TeamSection content={about.team} />
       <AboutCta content={about.cta} />
     </main>
   );

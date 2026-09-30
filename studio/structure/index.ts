@@ -109,11 +109,6 @@ export const structure: StructureResolver = (S) =>
             documentId: singletonDocumentIds.aboutPage,
           }),
           collectionEditor(S, {
-            title: 'Team Members',
-            schemaType: 'teamMember',
-            defaultOrdering: [{field: 'order', direction: 'asc'}],
-          }),
-          collectionEditor(S, {
             title: 'Process Steps',
             schemaType: 'processStep',
             defaultOrdering: [{field: 'step', direction: 'asc'}],
@@ -256,11 +251,6 @@ export const structure: StructureResolver = (S) =>
       ]),
       S.divider(),
       section(S, 'People', UsersIcon, [
-        collectionEditor(S, {
-          title: 'Team Members',
-          schemaType: 'teamMember',
-          defaultOrdering: [{field: 'order', direction: 'asc'}],
-        }),
         collectionEditor(S, {
           title: 'Authors',
           schemaType: 'author',

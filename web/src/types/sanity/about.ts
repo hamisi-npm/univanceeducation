@@ -33,15 +33,6 @@ export type SanityWhyChooseUsFeature = {
   icon: string;
 };
 
-export type SanityTeamMember = {
-  _id: string;
-  name: string;
-  position: string;
-  bio: string;
-  image: SanityImageWithAlt;
-  order?: number;
-};
-
 export type SanityAboutDocument = {
   hero: SanityAboutHero;
   companyStory: SanityAboutCompanyStory;
@@ -52,10 +43,6 @@ export type SanityAboutDocument = {
   whyChooseUs: {
     header: SanitySectionHeader;
     features: SanityWhyChooseUsFeature[] | null;
-  };
-  team: {
-    header: SanitySectionHeader;
-    members: SanityTeamMember[] | null;
   };
   cta: SanityCtaBanner;
   seo?: SanitySeo;

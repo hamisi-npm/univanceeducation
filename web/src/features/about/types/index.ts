@@ -60,21 +60,6 @@ export type WhyChooseUsContent = {
   features: WhyChooseUsFeature[];
 };
 
-export type TeamMember = {
-  id: string;
-  name: string;
-  position: string;
-  bio: string;
-  image: AboutImage | null;
-};
-
-export type TeamSectionContent = {
-  badge: string;
-  heading: string;
-  description: string;
-  members: TeamMember[];
-};
-
 export type AboutCtaContent = {
   badge: string;
   heading: string;
@@ -89,6 +74,5 @@ export type AboutPageContent = {
   companyStory: CompanyStoryContent;
   missionVision: MissionVisionContent;
   whyChooseUs: WhyChooseUsContent;
-  team: TeamSectionContent;
   cta: AboutCtaContent;
 };
