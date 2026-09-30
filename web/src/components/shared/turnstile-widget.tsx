@@ -20,7 +20,6 @@ type TurnstileApi = {
       appearance?: "always" | "execute" | "interaction-only";
     },
   ) => string;
-  reset: (widgetId?: string) => void;
   remove: (widgetId?: string) => void;
 };
 
@@ -36,7 +35,6 @@ type TurnstileWidgetProps = {
   onExpire: () => void;
   onError: () => void;
   className?: string;
-  onWidgetId?: (widgetId: string | null) => void;
 };
 
 /**
@@ -48,23 +46,22 @@ export function TurnstileWidget({
   onExpire,
   onError,
   className,
-  onWidgetId,
 }: TurnstileWidgetProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const widgetIdRef = useRef<string | null>(null);
   const [scriptReady, setScriptReady] = useState(false);
+  const [verificationStarted, setVerificationStarted] = useState(false);
   const reactId = useId();
 
   const onTokenRef = useRef(onToken);
   const onExpireRef = useRef(onExpire);
   const onErrorRef = useRef(onError);
-  const onWidgetIdRef = useRef(onWidgetId);
+  const verificationStartedRef = useRef(false);
 
   useEffect(() => {
     onTokenRef.current = onToken;
     onExpireRef.current = onExpire;
     onErrorRef.current = onError;
-    onWidgetIdRef.current = onWidgetId;
   });
 
   useEffect(() => {
@@ -78,44 +75,67 @@ export function TurnstileWidget({
 
     const widgetId = window.turnstile.render(containerRef.current, {
       sitekey: siteKey,
-      callback: (token) => onTokenRef.current(token),
+      callback: (token) => {
+        if (!verificationStartedRef.current) {
+          return;
+        }
+        onTokenRef.current(token);
+      },
       "expired-callback": () => onExpireRef.current(),
       "error-callback": () => onErrorRef.current(),
       theme: "light",
     });
 
     widgetIdRef.current = widgetId;
-    onWidgetIdRef.current?.(widgetId);
 
     return () => {
       if (widgetIdRef.current && window.turnstile) {
         window.turnstile.remove(widgetIdRef.current);
       }
       widgetIdRef.current = null;
-      onWidgetIdRef.current?.(null);
     };
   }, [scriptReady, siteKey]);
 
   return (
-    <div className={cn("min-h-[65px]", className)}>
-      <Script
-        id={`turnstile-script-${reactId}`}
-        src={TURNSTILE_SCRIPT_SRC}
-        strategy="afterInteractive"
-        onLoad={() => setScriptReady(true)}
-      />
-      <div
-        ref={containerRef}
-        className="cf-turnstile"
-        data-testid="turnstile-widget"
-      />
+    <div className={cn("space-y-2", className)}>
+      <label
+        htmlFor={`turnstile-gate-${reactId}`}
+        className="flex min-h-11 w-fit cursor-pointer items-center gap-3 text-sm text-foreground"
+      >
+        <input
+          id={`turnstile-gate-${reactId}`}
+          type="checkbox"
+          checked={verificationStarted}
+          onChange={(event) => {
+            const checked = event.currentTarget.checked;
+            verificationStartedRef.current = checked;
+            setVerificationStarted(checked);
+            if (!checked) {
+              setScriptReady(false);
+              onTokenRef.current("");
+            }
+          }}
+          className="size-4 shrink-0 accent-primary"
+        />
+        <span>Check this box to start security verification</span>
+      </label>
+
+      {verificationStarted ? (
+        <>
+          <Script
+            id={`turnstile-script-${reactId}`}
+            src={TURNSTILE_SCRIPT_SRC}
+            strategy="afterInteractive"
+            onReady={() => setScriptReady(true)}
+          />
+          <div
+            ref={containerRef}
+            className="cf-turnstile"
+            data-testid="turnstile-widget"
+          />
+        </>
+      ) : null}
+
     </div>
   );
-}
-
-export function resetTurnstileWidget(widgetId: string | null): void {
-  if (!widgetId || typeof window === "undefined" || !window.turnstile) {
-    return;
-  }
-  window.turnstile.reset(widgetId);
 }
